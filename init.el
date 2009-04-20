@@ -6,7 +6,7 @@
 
 ;; Manual customizations
 (server-start)
-(add-to-list 'load-path "~/.site-lisp")
+(add-to-list 'load-path "~/.emacs.d")
 (setq blink-cursor-mode nil)
 (setq truncate-partial-width-windows nil)
 (setq-default indent-tabs-mode nil)
@@ -77,19 +77,19 @@
 ;; File type support
 
 ;; Apache conf support
-(autoload 'apache-mode "apache-mode" "Edit Apache confs" t)
+;;(autoload 'apache-mode "apache-mode" "Edit Apache confs" t)
 
 ;; Ruby support
-(setq ri-ruby-script "/home/alex/.site-lisp/ri-emacs.rb")
-(autoload 'ri "/home/alex/.site-lisp/ri-ruby.el" nil t)
-(autoload 'ruby-mode "ruby-mode" "Edit Ruby files" t)
-(autoload 'rcodetools "rcodetools" nil t)
-(add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
-(setq ruby-indent-level 4)
-(setq ruby-deep-indent-paren nil)
+;;(setq ri-ruby-script "/home/alex/.emacs.d/ri-emacs.rb")
+;;(autoload 'ri "/home/alex/.emacs.d/ri-ruby.el" nil t)
+;;(autoload 'ruby-mode "ruby-mode" "Edit Ruby files" t)
+;;(autoload 'rcodetools "rcodetools" nil t)
+;;(add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
+;;(setq ruby-indent-level 4)
+;;(setq ruby-deep-indent-paren nil)
 
 ;; Haskell
-(load "~/.site-lisp/haskell-mode/haskell-site-file")
+(load "~/.emacs.d/haskell-mode/haskell-site-file")
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
