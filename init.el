@@ -1,27 +1,29 @@
+;; Lisp setup
 (require 'cl)
+(add-to-list 'load-path "~/.emacs.d")
 
 ;; Keep customizations in a separate file
 (setq custom-file "~/.emacs.d/emacs-custom.el")
 (load custom-file 'noerror)
 
 ;; Manual customizations
-(server-start)
-(add-to-list 'load-path "~/.emacs.d")
-(setq blink-cursor-mode nil)
-(setq truncate-partial-width-windows nil)
-(setq-default indent-tabs-mode nil)
-(setq mouse-autoselect-window t)
-(tool-bar-mode nil)
-(set-scroll-bar-mode nil)
-(menu-bar-mode nil)
-(show-paren-mode t)
 (fset 'yes-or-no-p 'y-or-n-p)
+(menu-bar-mode nil)
+(server-start)
+(set-scroll-bar-mode nil)
+(setq blink-cursor-mode nil)
 (setq custom-raised-buttons nil)
 (setq echo-keystrokes 0.01)
 (setq inhibit-startup-screen t)
 (setq make-backup-files nil)
 (setq mode-line-inverse-video nil)
+(setq mouse-autoselect-window t)
 (setq mouse-wheel-progressive-speed nil)
+(setq truncate-partial-width-windows nil)
+(setq-default indent-tabs-mode nil)
+(setq-default show-trailing-whitespace t)
+(show-paren-mode t)
+(tool-bar-mode nil)
 
 ;; Rebind keys
 (global-set-key "\C-x\C-k" 'kill-region)
