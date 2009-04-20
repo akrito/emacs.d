@@ -52,11 +52,6 @@
 (autoload 'ido-mode "ido")
 (ido-mode t)
 
-;; color themes
-;;(require 'color-theme)
-;;(color-theme-initialize)
-;;(color-theme-charcoal-black)
-
 ;; vcs stuff
 ;;(add-to-list 'vc-handled-backends 'SVN)
 ;;(add-to-list 'vc-handled-backends 'HG)
