@@ -1,7 +1,7 @@
 (require 'cl)
 
 ;; Keep customizations in a separate file
-(setq custom-file "~/.site-lisp/emacs-custom.el")
+(setq custom-file "~/.emacs.d/emacs-custom.el")
 (load custom-file 'noerror)
 
 ;; Manual customizations
