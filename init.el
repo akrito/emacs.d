@@ -75,9 +75,6 @@
   (define-key org-mode-map (kbd "C-<return>") 'anything))
 (add-hook 'org-mode-hook 'org-mode-setup)
 
-;; sup
-;;(add-to-list 'auto-mode-alist '("/tmp/sup.*" . post-mode))
-
 ;; restructured text
 (autoload 'rst-mode "rst" "restructured text" t)
 
