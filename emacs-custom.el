@@ -19,9 +19,7 @@
  '(show-trailing-whitespace t)
  '(special-display-buffer-names (quote ("*shell*" "*Shell Command Output*")))
  '(transient-mark-mode t)
- '(visible-bell t)
- '(w3m-cookie-accept-bad-cookies (quote ask))
- '(w3m-cookie-accept-domains (quote ("trac.ljworld.com"))))
+ '(visible-bell t))
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
