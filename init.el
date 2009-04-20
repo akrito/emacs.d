@@ -52,12 +52,6 @@
 (autoload 'ido-mode "ido")
 (ido-mode t)
 
-;; vcs stuff
-;;(add-to-list 'vc-handled-backends 'SVN)
-;;(add-to-list 'vc-handled-backends 'HG)
-;;(add-to-list 'vc-handled-backends 'GIT)
-;;(set-variable 'vc-follow-symlinks t)
-
 ;; File type support
 
 ;; Apache conf support
