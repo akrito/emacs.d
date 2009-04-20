@@ -20,10 +20,12 @@
 (setq mouse-autoselect-window t)
 (setq mouse-wheel-progressive-speed nil)
 (setq truncate-partial-width-windows nil)
+(setq visible-bell t)
 (setq-default indent-tabs-mode nil)
 (setq-default show-trailing-whitespace t)
 (show-paren-mode t)
 (tool-bar-mode nil)
+(transient-mark-mode t)
 
 ;; Rebind keys
 (global-set-key "\C-x\C-k" 'kill-region)
