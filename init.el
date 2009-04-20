@@ -31,12 +31,6 @@
                                try-complete-file-name
                                try-expand-dabbrev) t))
 
-
-;; line numbers
-;;(set-variable 'linum-format "%3d " nil)
-;;(set-variable 'column-number-mode nil nil)
-;;(set-variable 'line-number-mode nil nil)
-
 ;; better buffer names
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
