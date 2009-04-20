@@ -31,9 +31,6 @@
                                try-complete-file-name
                                try-expand-dabbrev) t))
 
-;; Look like Acme (useful with Wmii and plumbing)
-;;(setq frame-title-format
-;;      '(buffer-file-truename "%f" "%b"))
 
 ;; line numbers
 ;;(set-variable 'linum-format "%3d " nil)
