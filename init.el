@@ -77,7 +77,7 @@
 ;; File type support
 
 ;; Apache conf support
-;;(autoload 'apache-mode "apache-mode" "Edit Apache confs" t)
+(autoload 'apache-mode "apache-mode" "Edit Apache confs" t)
 
 ;; Ruby support
 ;;(setq ri-ruby-script "/home/alex/.emacs.d/ri-emacs.rb")
