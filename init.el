@@ -79,15 +79,6 @@
 ;; Apache conf support
 (autoload 'apache-mode "apache-mode" "Edit Apache confs" t)
 
-;; Ruby support
-;;(setq ri-ruby-script "/home/alex/.emacs.d/ri-emacs.rb")
-;;(autoload 'ri "/home/alex/.emacs.d/ri-ruby.el" nil t)
-;;(autoload 'ruby-mode "ruby-mode" "Edit Ruby files" t)
-;;(autoload 'rcodetools "rcodetools" nil t)
-;;(add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
-;;(setq ruby-indent-level 4)
-;;(setq ruby-deep-indent-paren nil)
-
 ;; Haskell
 (load "~/.emacs.d/haskell-mode/haskell-site-file")
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
