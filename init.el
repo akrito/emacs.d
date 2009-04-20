@@ -30,8 +30,6 @@
                              '(try-complete-file-name-partially
                                try-complete-file-name
                                try-expand-dabbrev) t))
-;;(global-set-key (kbd "C-SPC") 'dabbrev-expand)
-
 
 ;; Look like Acme (useful with Wmii and plumbing)
 ;;(setq frame-title-format
