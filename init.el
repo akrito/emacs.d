@@ -27,6 +27,10 @@
 (tool-bar-mode nil)
 (transient-mark-mode t)
 
+;; Highlight the current line
+(global-hl-line-mode t)
+(set-face-background 'hl-line "#fff")
+
 ;; Rebind keys
 (global-set-key "\C-x\C-k" 'kill-region)
 (global-set-key (kbd "C-o") 'find-file)
