@@ -7,11 +7,11 @@
 (load custom-file 'noerror)
 
 ;; Manual customizations
+(blink-cursor-mode nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 (menu-bar-mode nil)
 (server-start)
 (set-scroll-bar-mode nil)
-(setq blink-cursor-mode nil)
 (setq custom-raised-buttons nil)
 (setq echo-keystrokes 0.01)
 (setq inhibit-startup-screen t)
