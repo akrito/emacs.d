@@ -34,6 +34,9 @@
 (global-set-key (kbd "C-n") 'make-frame-command)
 (global-set-key (kbd "C-w") 'kill-this-buffer)
 (global-set-key (kbd "C-<return>") 'anything)
+(global-set-key (kbd "C-f") 'isearch-forward)
+(define-key isearch-mode-map (kbd "C-f") 'isearch-repeat-forward)
+(global-set-key (kbd "C-s") 'save-buffer)
 
 ;; Hippie or dabbrev expansion
 (global-set-key (kbd "C-SPC") (make-hippie-expand-function
