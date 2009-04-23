@@ -71,6 +71,10 @@
 
 ;; File type support
 
+;; Varnish conf support
+(autoload 'vcl-mode "vcl-mode" "Edit Varnish VCL files" t)
+(add-to-list 'auto-mode-alist '("\\.vcl$" . vcl-mode))
+
 ;; Apache conf support
 (autoload 'apache-mode "apache-mode" "Edit Apache confs" t)
 
