@@ -23,6 +23,7 @@
 (setq visible-bell t)
 (setq-default indent-tabs-mode nil)
 (setq-default show-trailing-whitespace t)
+(delete-selection-mode t)
 (show-paren-mode t)
 (tool-bar-mode nil)
 (transient-mark-mode t)
@@ -110,4 +111,3 @@
 (add-hook 'yaml-mode-hook
           '(lambda ()
              (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
-
