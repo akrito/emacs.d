@@ -82,7 +82,8 @@
 (autoload 'apache-mode "apache-mode" "Edit Apache confs" t)
 
 ;; Haskell
-(load "~/.emacs.d/haskell-mode/haskell-site-file")
+(autoload 'haskell-mode "~/.emacs.d/haskell-mode/haskell-site-file" "Haskell mode" t)
+(add-to-list 'auto-mode-alist '("\\.hs$" . haskell-mode))
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
