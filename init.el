@@ -23,6 +23,8 @@
 (setq truncate-partial-width-windows nil)
 (setq visible-bell t)
 (setq-default x-pointer-shape x-pointer-arrow)
+;; Setting the mouse-color is believed to be necessary to “refresh” the pointer shape.
+(set-mouse-color "black")
 (setq-default indent-tabs-mode nil)
 (setq-default show-trailing-whitespace t)
 (show-paren-mode t)
