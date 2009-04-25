@@ -69,10 +69,8 @@
 (autoload 'ido-mode "ido")
 (ido-mode t)
 
-;; Acme-style right-click searching
-(require 'acme-search)
-(global-set-key [(mouse-3)] 'acme-search-forward)
-(global-set-key [(shift mouse-3)] 'acme-search-backward)
+;; Some Acme-style chords
+(require 'acme-mouse)
 
 ;; File type support
 
