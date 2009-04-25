@@ -8,6 +8,7 @@
 
 ;; Manual customizations
 (blink-cursor-mode nil)
+(setq-default cursor-type 'bar)
 (fset 'yes-or-no-p 'y-or-n-p)
 (menu-bar-mode nil)
 (server-start)
@@ -21,6 +22,7 @@
 (setq mouse-wheel-progressive-speed nil)
 (setq truncate-partial-width-windows nil)
 (setq visible-bell t)
+(setq-default x-pointer-shape x-pointer-arrow)
 (setq-default indent-tabs-mode nil)
 (setq-default show-trailing-whitespace t)
 (show-paren-mode t)
