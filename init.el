@@ -42,7 +42,7 @@
 (define-key isearch-mode-map (kbd "C-f") 'isearch-repeat-forward)
 (global-set-key (kbd "C-s") 'save-buffer)
 
-;; Hippie or dabbrev expansion
+;; Hippie expansion
 (global-set-key (kbd "C-SPC") (make-hippie-expand-function
                              '(try-complete-file-name-partially
                                try-complete-file-name
@@ -65,7 +65,7 @@
             anything-c-source-emacs-commands
             anything-c-source-locate))
 
-;; ido.el
+;; ido.el - better buffer and filename completion
 (autoload 'ido-mode "ido")
 (ido-mode t)
 
