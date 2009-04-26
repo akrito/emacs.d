@@ -8,7 +8,6 @@
 
 ;; Manual customizations
 (blink-cursor-mode nil)
-(setq-default cursor-type 'bar)
 (fset 'yes-or-no-p 'y-or-n-p)
 (menu-bar-mode nil)
 (server-start)
@@ -22,14 +21,19 @@
 (setq mouse-wheel-progressive-speed nil)
 (setq truncate-partial-width-windows nil)
 (setq visible-bell t)
-(setq-default x-pointer-shape x-pointer-arrow)
-;; Setting the mouse-color is believed to be necessary to “refresh” the pointer shape.
-(set-mouse-color "black")
+(setq-default cursor-type 'bar)
 (setq-default indent-tabs-mode nil)
 (setq-default show-trailing-whitespace t)
 (show-paren-mode t)
 (tool-bar-mode nil)
 (transient-mark-mode t)
+
+;; On X11, change the pointer to an arrow
+(if (boundp 'x-pointer-arrow)
+    (progn
+      (setq-default x-pointer-shape x-pointer-arrow)
+      ;; hack to force the pointer shape to change
+      (set-mouse-color "black")))
 
 ;; Highlight the current line
 (global-hl-line-mode t)
