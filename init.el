@@ -22,6 +22,7 @@
 (setq mouse-wheel-progressive-speed nil)
 (setq truncate-partial-width-windows nil)
 (setq visible-bell t)
+(setq vc-follow-symlinks t)
 (setq-default cursor-type 'bar)
 (setq-default indent-tabs-mode nil)
 (setq-default show-trailing-whitespace t)
