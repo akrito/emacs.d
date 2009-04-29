@@ -17,7 +17,6 @@
 (setq inhibit-startup-screen t)
 (setq make-backup-files nil)
 (setq mode-line-inverse-video nil)
-(setq mouse-drag-copy-region nil)
 (setq mouse-autoselect-window t)
 (setq mouse-wheel-progressive-speed nil)
 (setq truncate-partial-width-windows nil)
