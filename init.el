@@ -28,7 +28,6 @@
 (setq-default show-trailing-whitespace t)
 (show-paren-mode t)
 (tool-bar-mode nil)
-(transient-mark-mode t)
 
 ;; On X11, change the pointer to an arrow
 (if (boundp 'x-pointer-arrow)
