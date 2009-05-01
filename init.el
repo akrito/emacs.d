@@ -35,6 +35,10 @@
       ;; hack to force the pointer shape to change
       (set-mouse-color "black")))
 
+;; github gists
+(require 'gist)
+(setq gist-view-gist t)
+
 ;; Highlight the current line
 (global-hl-line-mode t)
 (set-face-background 'hl-line "#fff")
