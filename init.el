@@ -50,6 +50,8 @@
       smtpmail-smtp-service 587
       smtpmail-debug-info t)
 (autoload 'compose-mail "smtpmail")
+(load "abbrevs" 'noerror)
+(add-hook 'mail-mode-hook 'mail-abbrevs-setup)
 
 ;; github gists
 (require 'gist)
