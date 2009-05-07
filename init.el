@@ -19,6 +19,7 @@
 (setq mode-line-inverse-video nil)
 (setq mouse-autoselect-window t)
 (setq mouse-wheel-progressive-speed nil)
+(setq starttls-use-gnutls t)
 (setq truncate-partial-width-windows nil)
 (setq visible-bell t)
 (setq vc-follow-symlinks t)
@@ -34,6 +35,21 @@
       (setq-default x-pointer-shape x-pointer-arrow)
       ;; hack to force the pointer shape to change
       (set-mouse-color "black")))
+
+;; smtp mail
+;; http://obfuscatedcode.wordpress.com/2007/04/26/configuring-emacs-for-gmails-smtp/
+(setq user-mail-address "alex.kritikos@gmail.com")
+(setq send-mail-function 'smtpmail-send-it
+      message-send-mail-function 'smtpmail-send-it
+      smtpmail-starttls-credentials
+      '(("smtp.gmail.com" 587 nil nil))
+      smtpmail-auth-credentials
+      (expand-file-name "~/.authinfo")
+      smtpmail-default-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-service 587
+      smtpmail-debug-info t)
+(autoload 'compose-mail "smtpmail")
 
 ;; github gists
 (require 'gist)
