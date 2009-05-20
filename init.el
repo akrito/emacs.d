@@ -108,6 +108,9 @@
 (autoload 'vcl-mode "vcl-mode" "Edit Varnish VCL files" t)
 (add-to-list 'auto-mode-alist '("\\.vcl$" . vcl-mode))
 
+(autoload 'lua-mode "lua-mode" "Edit Lua scripts" t)
+(add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+
 ;; Apache conf support
 (autoload 'apache-mode "apache-mode" "Edit Apache confs" t)
 
