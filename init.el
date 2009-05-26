@@ -143,3 +143,6 @@
 (add-hook 'yaml-mode-hook
           '(lambda ()
              (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
+
+;; allow kill in read-only buffers
+(setq kill-read-only-ok 1)
