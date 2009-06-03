@@ -68,7 +68,9 @@
 (global-set-key (kbd "C-o") 'find-file)
 (global-set-key (kbd "C-b") 'switch-to-buffer)
 (global-set-key (kbd "C-n") 'make-frame-command)
-(global-set-key (kbd "C-w") 'kill-this-buffer)
+;; I'd like to use this, but it sometimes gets dead errors
+;; (global-set-key (kbd "C-w") 'kill-this-buffer)
+(global-set-key (kbd "C-w") 'ido-kill-buffer)
 (global-set-key (kbd "C-<return>") 'anything)
 (global-set-key (kbd "C-f") 'isearch-forward)
 (define-key isearch-mode-map (kbd "C-f") 'isearch-repeat-forward)
