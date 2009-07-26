@@ -8,7 +8,7 @@
  '(mode-line-format (quote ("%e" (buffer-file-truename "%f" "%b") #("-%*-" 0 4 (auto-composed t)) (vc-mode vc-mode) #("--" 0 2 (auto-composed t)) mode-line-modes #("%-" 0 2 (auto-composed t)))))
  '(mouse-wheel-scroll-amount (quote (2 ((shift) . 1) ((control)))))
  '(org-agenda-files (quote ("~/wiki/wiki.org_archive")))
- '(special-display-buffer-names (quote ("*shell*" "*Shell Command Output*" "*Help*" "*Calendar*"))))
+ '(special-display-buffer-names (quote ("*shell*" "*Shell Command Output*" "*Help*" "*Calendar*" "*Async Shell Command*"))))
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.

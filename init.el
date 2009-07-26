@@ -76,6 +76,9 @@
 (define-key isearch-mode-map (kbd "C-f") 'isearch-repeat-forward)
 (global-set-key (kbd "C-s") 'save-buffer)
 (global-set-key (kbd "C-/") 'comment-or-uncomment-region)
+(global-set-key (kbd "C-!") 'async-shell-command)
+(global-set-key (kbd "C-|") 'shell-command-on-region)
+
 
 ;; Hippie expansion
 (global-set-key (kbd "C-SPC") (make-hippie-expand-function
