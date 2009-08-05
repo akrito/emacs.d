@@ -21,6 +21,7 @@
 (setq mode-line-inverse-video nil)
 (setq mouse-autoselect-window t)
 (setq mouse-wheel-progressive-speed nil)
+(setq org-hide-leading-stars t)
 (setq starttls-use-gnutls t)
 (setq truncate-partial-width-windows nil)
 (setq visible-bell t)
@@ -167,3 +168,6 @@
 
 ;; ruby
 (setq ruby-indent-level 4)
+
+;; markdown
+(autoload 'markdown-mode "markdown-mode" "markdown" t)
