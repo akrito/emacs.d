@@ -6,13 +6,6 @@
 (setq custom-file "emacs-custom.el")
 (load custom-file 'noerror)
 
-;; one-to-one windows
-(setq pop-up-frames t)
-(setq special-display-buffer-names
-      '(
-        ("*Completions*" (same-frame t))
-        ("*anything*" (same-frame t))))
-
 ;; Manual customizations
 (blink-cursor-mode nil)
 (fset 'yes-or-no-p 'y-or-n-p)
