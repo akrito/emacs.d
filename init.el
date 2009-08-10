@@ -6,6 +6,13 @@
 (setq custom-file "emacs-custom.el")
 (load custom-file 'noerror)
 
+;; one-to-one windows
+(setq pop-up-frames t)
+(setq special-display-buffer-names
+      '(
+        ("*Completions*" (same-frame t))
+        ("*anything*" (same-frame t))))
+
 ;; Manual customizations
 (blink-cursor-mode nil)
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -62,7 +69,8 @@
 
 ;; Highlight the current line
 (global-hl-line-mode t)
-(set-face-background 'hl-line "#fff")
+(set-face-background 'hl-line "#e3e3e3")
+
 
 ;; Rebind keys
 (global-set-key "\C-x\C-k" 'kill-region)
@@ -107,6 +115,13 @@
 ;; ido.el - better buffer and filename completion
 (autoload 'ido-mode "ido")
 (ido-mode t)
+
+;; one-to-one windows
+(setq pop-up-frames t)
+(setq special-display-buffer-names
+      '(
+        ("*Completions*" (same-frame t))
+        ("*anything*" (same-frame t))))
 
 ;; Some Acme-style chords
 (require 'acme-mouse)

@@ -1027,22 +1027,16 @@ This function allows easy sequencing of transformer functions."
 (setq anything-type-attributes
       `((buffer
          (action
-          ,@(if pop-up-frames
-                '(("Switch to buffer other window" . switch-to-buffer-other-window)
-                  ("Switch to buffer" . switch-to-buffer))
-              '(("Switch to buffer" . switch-to-buffer)
-                ("Switch to buffer other window" . switch-to-buffer-other-window)
-                ("Switch to buffer other frame" . switch-to-buffer-other-frame)))
+          ("Switch to buffer" . switch-to-buffer)
+          ("Switch to buffer other window" . switch-to-buffer-other-window)
+          ("Switch to buffer other frame" . switch-to-buffer-other-frame)
           ("Display buffer"   . display-buffer)
           ("Kill buffer"      . kill-buffer)))
         (file
          (action
-          ,@(if pop-up-frames
-                '(("Find file other window" . find-file-other-window)
-                  ("Find file" . find-file))
-              '(("Find file" . find-file)
-                ("Find file other window" . find-file-other-window)
-                ("Find file other frame" . find-file-other-frame)))
+          ("Find file" . find-file)
+          ("Find file other window" . find-file-other-window)
+          ("Find file other frame" . find-file-other-frame)
           ("Open dired in file's directory" . anything-c-open-dired)
           ("Delete file" . anything-c-delete-file)
           ("Open file externally" . anything-c-open-file-externally)
