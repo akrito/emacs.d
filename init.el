@@ -21,7 +21,6 @@
 (setq mode-line-inverse-video nil)
 (setq mouse-autoselect-window t)
 (setq mouse-wheel-progressive-speed nil)
-(setq org-hide-leading-stars t)
 (setq starttls-use-gnutls t)
 (setq truncate-partial-width-windows nil)
 (setq visible-bell t)
@@ -140,6 +139,7 @@
 
 ;; org mode
 (setq org-agenda-files (list "~/wiki/Work.org" "~/wiki/Work.org_archive"))
+(setq org-hide-leading-stars t)
 (setq org-log-done t)
 (setq org-agenda-skip-archived-trees nil)
 (setq org-highlight-sparse-tree-matches nil)
