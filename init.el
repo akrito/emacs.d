@@ -113,6 +113,7 @@
 (setq special-display-buffer-names
       '(
         ("*Completions*" (same-frame t))
+        ("*Ido Completions*" (same-frame t))
         ("*anything*" (same-frame t))))
 
 ;; Some Acme-style chords
