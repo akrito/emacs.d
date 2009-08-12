@@ -149,7 +149,8 @@
 (global-set-key "\C-cl" 'org-store-link)
 ;; persist the "anything" keybinding in org-mode
 (defun org-mode-setup ()
-  (define-key org-mode-map (kbd "C-<return>") 'anything))
+  (define-key org-mode-map (kbd "C-<return>") 'anything)
+  (define-key org-mode-map (kbd "C-M-<return>") 'org-meta-return))
 (add-hook 'org-mode-hook 'org-mode-setup)
 
 ;; restructured text
