@@ -61,7 +61,7 @@
 
 ;; Highlight the current line
 (global-hl-line-mode t)
-(set-face-background 'hl-line "#e3e3e3")
+(set-face-background 'hl-line "#eeeeee")
 
 
 ;; Rebind keys
