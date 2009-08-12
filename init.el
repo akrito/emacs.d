@@ -31,6 +31,14 @@
 (show-paren-mode t)
 (tool-bar-mode nil)
 
+;; sudo editing of local files
+;; http://nflath.com/2009/08/tramp/
+(defun sudo-edit-current-file ()
+  (interactive)
+  (find-alternate-file (concat "/sudo:root@localhost:" (buffer-file-name (current-buffer)))))
+(global-set-key (kbd "C-c C-r") 'sudo-edit-current-file)
+
+
 ;; On X11, change the pointer to an arrow
 (if (boundp 'x-pointer-arrow)
     (progn
