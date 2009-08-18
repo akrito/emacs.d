@@ -85,15 +85,42 @@
 (define-key isearch-mode-map (kbd "C-f") 'isearch-repeat-forward)
 (global-set-key (kbd "C-s") 'save-buffer)
 (global-set-key (kbd "C-/") 'comment-or-uncomment-region)
-(global-set-key (kbd "C-!") 'async-shell-command)
+(global-set-key (kbd "C-!") 'shell-command)
 (global-set-key (kbd "C-|") 'shell-command-on-region)
-
 
 ;; Hippie expansion
 (global-set-key (kbd "C-SPC") (make-hippie-expand-function
                              '(try-complete-file-name-partially
                                try-complete-file-name
                                try-expand-dabbrev) t))
+
+;; add a column of numbers
+(defun sum-column()
+  "Sums a column of numbers starting at point"
+  (interactive)
+  (save-excursion
+    (if (and (not (= (current-column) 0))
+	     (re-search-backward "[ \t]" 0 t ))
+	(forward-char))
+    (let ((retn 0)
+	  (old-column (current-column))
+	  (old-next-line-add-newlines))
+      (setq next-line-add-newlines nil)
+      (while (not
+	      (looking-at "^[ \t]*$"))
+	(move-to-column old-column t)
+	(if (and (looking-at "-?[0123456789]+")
+		 (eq (current-column) old-column))
+		(setq retn (+ retn (string-to-number (current-word)))))
+	(next-line)
+	(beginning-of-line))
+      (next-line)
+      (next-line)
+      (move-end-of-line 0)
+      (insert (make-string (- old-column (current-column)) 32))
+      (insert (number-to-string retn))
+      (setq next-line-add-newlines old-next-line-add-newlines)
+      retn)))
 
 ;; better buffer names
 (require 'uniquify)
@@ -189,3 +216,6 @@
 
 ;; markdown
 (autoload 'markdown-mode "markdown-mode" "markdown" t)
+
+;; javascript
+;; TODO remove the mouse bindings that conflict with acme-mouse.el
