@@ -56,7 +56,8 @@
      "^Date"
      "^To")
   ;; get addresses only from these folders
-  bbdb-wl-folder-regexp "^.Sent\\|^.INBOX")
+  bbdb-wl-folder-regexp "^.Sent\\|^.INBOX"
+  mime-button-face 'shadow)
 
 
 (define-key wl-draft-mode-map (kbd "<tab>") 'bbdb-complete-name)
