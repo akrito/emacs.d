@@ -55,12 +55,8 @@
      "^Subject"
      "^Date"
      "^To")
-
-  ;; bbdb
-
-  ;; i don't want to store addresses from my mailing folders
   ;; get addresses only from these folders
   bbdb-wl-folder-regexp "^.Sent\\|^.INBOX")
 
 
-(define-key wl-draft-mode-map (kbd "<C-tab>") 'bbdb-complete-name)
+(define-key wl-draft-mode-map (kbd "<tab>") 'bbdb-complete-name)
