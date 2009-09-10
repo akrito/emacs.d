@@ -15,7 +15,7 @@
 (setq custom-raised-buttons nil)
 (setq echo-keystrokes 0.01)
 (setq inhibit-startup-screen t)
-(setq fill-column 79)
+(setq-default fill-column 79)
 (setq kill-read-only-ok t)
 (setq make-backup-files nil)
 (setq mode-line-inverse-video nil)
