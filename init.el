@@ -206,7 +206,10 @@
       '(
         ("*Completions*" (same-frame t))
         ("*Ido Completions*" (same-frame t))
-        ("*anything*" (same-frame t))))
+        ("*anything*" (same-frame t))
+        ("*BBDB*" (same-frame t))
+        ("*Deletions*" (same-frame t))
+        ("*Marked Processes*" (same-frame t))))
 
 ;; Some Acme-style chords
 (require 'acme-mouse)
