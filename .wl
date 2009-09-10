@@ -59,5 +59,4 @@
   bbdb-wl-folder-regexp "^.Sent\\|^.INBOX"
   mime-button-face 'shadow)
 
-
 (define-key wl-draft-mode-map (kbd "<tab>") 'bbdb-complete-name)

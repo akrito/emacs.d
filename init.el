@@ -93,7 +93,7 @@
 (bbdb-initialize)
 (setq
     bbdb-offer-save 1                        ;; 1 means save-without-asking
-    bbdb-use-pop-up nil                      ;; disallow popups for addresses
+    bbdb-use-pop-up nil
     bbdb-electric-p t                        ;; be disposable with SPC
     bbdb-popup-target-lines  1               ;; very small
     bbdb-dwim-net-address-allow-redundancy t ;; always use full name
@@ -108,7 +108,7 @@
     bbdb-use-alternate-names t               ;; use AKA
     bbdb-elided-display t                    ;; single-line addresses
     bbdb-completion-display-record nil       ;; don't open a window when completing
-    
+
     ;; auto-create addresses from mail
     bbdb/mail-auto-create-p 'bbdb-ignore-some-messages-hook
     bbdb-ignore-some-messages-alist ;; don't ask about fake addresses
