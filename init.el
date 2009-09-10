@@ -118,7 +118,10 @@
     '(( "From" . "no.?reply\\|DAEMON\\|daemon\\|facebookmail\\|twitter")))
 
 ;; github gists
-(require 'gist)
+(autoload 'gist-region "gist" "Gist" t)
+(autoload 'gist-region-private "gist" "Gist" t)
+(autoload 'gist-region-or-buffer "gist" "Gist" t)
+(autoload 'gist-region-or-buffer-private "gist" "Gist" t)
 (setq gist-view-gist t)
 
 ;; Highlight the current line
