@@ -30,6 +30,7 @@
 (setq-default show-trailing-whitespace t)
 (show-paren-mode t)
 (tool-bar-mode nil)
+(setq thing-at-point-file-name-chars "-~/[:alnum:]_.${}#%,")
 
 ;; sudo editing of local files
 ;; http://nflath.com/2009/08/tramp/
