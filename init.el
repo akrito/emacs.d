@@ -12,32 +12,32 @@
 (menu-bar-mode nil)
 (server-start)
 (set-scroll-bar-mode nil)
-(setq custom-raised-buttons nil)
-(setq echo-keystrokes 0.01)
-(setq inhibit-startup-screen t)
-(setq-default fill-column 79)
-(setq kill-read-only-ok t)
-(setq make-backup-files nil)
-(setq mode-line-inverse-video nil)
-(setq mouse-autoselect-window t)
-(setq mouse-wheel-progressive-speed nil)
-(setq starttls-use-gnutls t)
-(setq truncate-partial-width-windows nil)
-(setq visible-bell t)
-(setq vc-follow-symlinks t)
-(setq-default cursor-type 'bar)
-(setq-default indent-tabs-mode nil)
-(setq-default show-trailing-whitespace t)
+(setq custom-raised-buttons          nil
+      echo-keystrokes                0.01
+      gist-view-gist                 t
+      inhibit-startup-screen         t
+      kill-read-only-ok              t
+      make-backup-files              nil
+      mode-line-inverse-video        nil
+      mouse-autoselect-window        t
+      mouse-wheel-progressive-speed  nil
+      starttls-use-gnutls            t
+      truncate-partial-width-windows nil
+      visible-bell                   t
+      vc-follow-symlinks             t
+      thing-at-point-file-name-chars "-~/[:alnum:]_.${}#%,")
+(setq-default fill-column              79
+              cursor-type              'bar
+              indent-tabs-mode         nil
+              show-trailing-whitespace t)
 (show-paren-mode t)
 (tool-bar-mode nil)
-(setq thing-at-point-file-name-chars "-~/[:alnum:]_.${}#%,")
 
 ;; sudo editing of local files
 ;; http://nflath.com/2009/08/tramp/
 (defun sudo-edit-current-file ()
   (interactive)
   (find-alternate-file (concat "/sudo:root@localhost:" (buffer-file-name (current-buffer)))))
-(global-set-key (kbd "C-c C-r") 'sudo-edit-current-file)
 
 ;; On X11, change the pointer to an arrow
 (if (boundp 'x-pointer-arrow)
@@ -48,35 +48,23 @@
 
 ;; smtp mail
 ;; http://obfuscatedcode.wordpress.com/2007/04/26/configuring-emacs-for-gmails-smtp/
-(setq user-mail-address "alex.kritikos@gmail.com")
-(setq user-full-name "Alex Kritikos")
-(setq send-mail-function 'smtpmail-send-it
-      message-send-mail-function 'smtpmail-send-it
-      smtpmail-starttls-credentials
-      '(("smtp.gmail.com" 587 nil nil))
-      smtpmail-auth-credentials
-      (expand-file-name "~/.authinfo")
+(setq user-mail-address            "alex.kritikos@gmail.com"
+      user-full-name "Alex         Kritikos"
+      send-mail-function           'smtpmail-send-it
+      message-send-mail-function   'smtpmail-send-it
+      smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+      smtpmail-auth-credentia      (expand-file-name "~/.authinfo")
       smtpmail-default-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-service 587
-      smtpmail-debug-info t)
+      smtpmail-smtp-server         "smtp.gmail.com"
+      smtpmail-smtp-service        587
+      smtpmail-debug-info          t)
 (autoload 'compose-mail "smtpmail")
-(load "abbrevs" 'noerror)
 (add-hook 'mail-mode-hook 'mail-abbrevs-setup)
 
 ;; wanderlust
 (autoload 'wl "wl" "Wanderlust" t)
 (autoload 'wl-other-frame "wl" "Wanderlust on new frame." t)
 (autoload 'wl-draft "wl-draft" "Write draft with Wanderlust." t)
-
-;; IMAP
-;;(setq elmo-imap4-default-server "imap.gmail.com")
-;;(setq elmo-imap4-default-user "alex.kritikos@gmail.com")
-;;(setq elmo-imap4-default-authenticate-type 'clear)
-;;(setq elmo-imap4-default-port '993)
-;;(setq elmo-imap4-default-stream-type 'ssl)
-;;(setq elmo-imap4-use-modified-utf7 t)
-
 (autoload 'wl-user-agent-compose "wl-draft" nil t)
 (if (boundp 'mail-user-agent)
     (setq mail-user-agent 'wl-user-agent))
@@ -122,34 +110,37 @@
 (autoload 'gist-region-private "gist" "Gist" t)
 (autoload 'gist-region-or-buffer "gist" "Gist" t)
 (autoload 'gist-region-or-buffer-private "gist" "Gist" t)
-(setq gist-view-gist t)
 
 ;; Highlight the current line
 (global-hl-line-mode t)
 (set-face-background 'hl-line "#eeeeee")
 
-
 ;; Rebind keys
-(global-set-key "\C-x\C-k" 'kill-region)
-(global-set-key (kbd "C-o") 'find-file)
-(global-set-key (kbd "C-b") 'switch-to-buffer)
-(global-set-key (kbd "C-n") 'make-frame-command)
-;; I'd like to use this, but it sometimes gets dead errors
-;; (global-set-key (kbd "C-w") 'kill-this-buffer)
-(global-set-key (kbd "C-w") 'ido-kill-buffer)
-(global-set-key (kbd "C-<return>") 'anything)
-(global-set-key (kbd "C-f") 'isearch-forward)
-(define-key isearch-mode-map (kbd "C-f") 'isearch-repeat-forward)
-(global-set-key (kbd "C-s") 'save-buffer)
-(global-set-key (kbd "C-/") 'comment-or-uncomment-region)
 (global-set-key (kbd "C-!") 'shell-command)
 (global-set-key (kbd "C-|") 'shell-command-on-region)
-
+(global-set-key (kbd "C-c C-r") 'sudo-edit-current-file)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cl" 'org-store-link)
 ;; Hippie expansion
 (global-set-key (kbd "C-SPC") (make-hippie-expand-function
                              '(try-complete-file-name-partially
                                try-complete-file-name
                                try-expand-dabbrev) t))
+;; New ergonomic bindings
+;;://xahlee.org/emacs/ergonomic_emacs_keybinding.html
+(load "ergonomic_keybinding_qwerty")
+;; I don't like all of them
+(global-set-key (kbd "C-n") 'make-frame-command)
+(global-set-key (kbd "C-b") 'switch-to-buffer)
+(global-set-key
+     "\M-a"
+     (lambda ()
+       (interactive)
+       (call-interactively
+        (intern
+         (ido-completing-read
+          "M-a "
+          (all-completions "" obarray 'commandp))))))
 
 ;; add a column of numbers
 (defun sum-column()
@@ -157,20 +148,20 @@
   (interactive)
   (save-excursion
     (if (and (not (= (current-column) 0))
-	     (re-search-backward "[ \t]" 0 t ))
-	(forward-char))
+             (re-search-backward "[ \t]" 0 t ))
+        (forward-char))
     (let ((retn 0)
-	  (old-column (current-column))
-	  (old-next-line-add-newlines))
+          (old-column (current-column))
+          (old-next-line-add-newlines))
       (setq next-line-add-newlines nil)
       (while (not
-	      (looking-at "^[ \t]*$"))
-	(move-to-column old-column t)
-	(if (and (looking-at "-?[0123456789]+")
-		 (eq (current-column) old-column))
-		(setq retn (+ retn (string-to-number (current-word)))))
-	(next-line)
-	(beginning-of-line))
+              (looking-at "^[ \t]*$"))
+        (move-to-column old-column t)
+        (if (and (looking-at "-?[0123456789]+")
+                 (eq (current-column) old-column))
+            (setq retn (+ retn (string-to-number (current-word)))))
+        (next-line)
+        (beginning-of-line))
       (next-line)
       (next-line)
       (move-end-of-line 0)
@@ -181,20 +172,11 @@
 
 ;; better buffer names
 (require 'uniquify)
-(setq uniquify-buffer-name-style 'forward)
-(setq uniquify-strip-common-suffix nil)
-(setq uniquify-separator "/")
-(setq uniquify-after-kill-buffer-p t) ; rename after killing uniquified
-(setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special buffers
-
-;; anything.el - Quicksilver for Emacs
-(require 'anything)
-(require 'anything-config)
-(setq anything-sources
-      (list anything-c-source-buffers
-            anything-c-source-file-name-history
-            anything-c-source-emacs-commands
-            anything-c-source-locate))
+(setq uniquify-buffer-name-style   'forward
+      uniquify-strip-common-suffix nil
+      uniquify-separator           "/"
+      uniquify-after-kill-buffer-p t
+      uniquify-ignore-buffers-re   "^\\*")
 
 ;; ido.el - better buffer and filename completion
 (autoload 'ido-mode "ido")
@@ -234,19 +216,12 @@
 (add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
 
 ;; org mode
-(setq org-agenda-files (list "~/wiki/Work.org" "~/wiki/Work.org_archive"))
+(setq org-agenda-files (list "~/work.org" "~/work.org_archive"))
 (setq org-hide-leading-stars t)
 (setq org-log-done t)
 (setq org-agenda-skip-archived-trees nil)
 (setq org-highlight-sparse-tree-matches nil)
-(global-set-key "\C-ca" 'org-agenda)
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-(global-set-key "\C-cl" 'org-store-link)
-;; persist the "anything" keybinding in org-mode
-(defun org-mode-setup ()
-  (define-key org-mode-map (kbd "C-<return>") 'anything)
-  (define-key org-mode-map (kbd "C-M-<return>") 'org-meta-return))
-(add-hook 'org-mode-hook 'org-mode-setup)
 
 ;; restructured text
 (autoload 'rst-mode "rst" "restructured text" t)
