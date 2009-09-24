@@ -1,9 +1,10 @@
 ;; Lisp setup
 (require 'cl)
 (add-to-list 'load-path "~/.emacs.d")
+(add-to-list 'load-path "~/.emacs.d/company")
 
 ;; Keep customizations in a separate file
-(setq custom-file "emacs-custom.el")
+(setq custom-file "~/.emacs.d/emacs-custom.el")
 (load custom-file 'noerror)
 
 ;; Manual customizations
@@ -71,7 +72,12 @@
 
 ;; Highlight the current line
 (global-hl-line-mode t)
-(set-face-background 'hl-line "#eeeeee")
+(set-face-background 'hl-line "#333333")
+
+;; Colors
+(require 'color-theme)
+(color-theme-initialize)
+(color-theme-tty-dark)
 
 ;; Rebind keys
 (global-set-key (kbd "C-!") 'shell-command)
@@ -84,6 +90,15 @@
                              '(try-complete-file-name-partially
                                try-complete-file-name
                                try-expand-dabbrev) t))
+;; Company expansion (currently doesn't work with python)
+(autoload 'company-mode "company" nil t)
+(autoload 'global-company-mode "company" nil t)
+(global-company-mode)
+
+;; (eval-after-load "company"
+;;   '(progn
+;;      (setq company-backends '(company-dabbrev-code))))
+
 ;; New ergonomic bindings
 ;;://xahlee.org/emacs/ergonomic_emacs_keybinding.html
 (load "ergonomic_keybinding_qwerty")
@@ -139,6 +154,7 @@
 (autoload 'vcl-mode "vcl-mode" "Edit Varnish VCL files" t)
 (add-to-list 'auto-mode-alist '("\\.vcl$" . vcl-mode))
 
+;; Lua support
 (autoload 'lua-mode "lua-mode" "Edit Lua scripts" t)
 (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
 
@@ -171,20 +187,28 @@
           '(lambda ()
              (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
 
-;; python + pyflakes
-(load "flymake" t)
-(defun flymake-pyflakes-init ()
-  (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                     'flymake-create-temp-inplace))
-         (local-file (file-relative-name
-                      temp-file
-                      (file-name-directory buffer-file-name))))
-    (list "pyflakes" (list local-file))))
-(add-to-list 'flymake-allowed-file-name-masks
-             '("\\.py\\'" flymake-pyflakes-init))
-(add-hook 'find-file-hook 'flymake-find-file-hook)
-(add-hook 'python-mode-hook
-          '(lambda () (eldoc-mode 1)) t)
+;; python
+;; (load "flymake" t)
+;; (defun flymake-pyflakes-init ()
+;;   (let* ((temp-file (flymake-init-create-temp-buffer-copy
+;;                      'flymake-create-temp-inplace))
+;;          (local-file (file-relative-name
+;;                       temp-file
+;;                       (file-name-directory buffer-file-name))))
+;;     (list "pyflakes" (list local-file))))
+;; (add-to-list 'flymake-allowed-file-name-masks
+;;              '("\\.py\\'" flymake-pyflakes-init))
+;; (add-hook 'find-file-hook 'flymake-find-file-hook)
+;; (add-hook 'python-mode-hook
+;;           '(lambda () (eldoc-mode 1)) t)
+;;(require 'pysmell)
+ ;;(require 'pymacs)
+;; (autoload 'pymacs-apply "pymacs")
+;; (autoload 'pymacs-call "pymacs")
+;; (autoload 'pymacs-eval "pymacs" nil t)
+;; (autoload 'pymacs-exec "pymacs" nil t)
+;; (autoload 'pymacs-load "pymacs" nil t)
+ ;;(pymacs-load "ropemacs" "rope-")
 
 ;; ruby
 (setq ruby-indent-level 4)
