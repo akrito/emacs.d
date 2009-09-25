@@ -77,7 +77,7 @@
 ;; Colors
 (require 'color-theme)
 (color-theme-initialize)
-(color-theme-tty-dark)
+(color-theme-arjen)
 
 ;; Rebind keys
 (global-set-key (kbd "C-!") 'shell-command)
