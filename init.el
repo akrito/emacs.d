@@ -1,7 +1,7 @@
 ;; Lisp setup
 (require 'cl)
 (add-to-list 'load-path "~/.emacs.d")
-(add-to-list 'load-path "~/.emacs.d/company")
+;; (add-to-list 'load-path "~/.emacs.d/company")
 
 ;; Keep customizations in a separate file
 (setq custom-file "~/.emacs.d/emacs-custom.el")
@@ -83,17 +83,15 @@
 (global-set-key (kbd "C-!") 'shell-command)
 (global-set-key (kbd "C-|") 'shell-command-on-region)
 (global-set-key (kbd "C-c C-r") 'sudo-edit-current-file)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cl" 'org-store-link)
 ;; Hippie expansion
 (global-set-key (kbd "C-SPC") (make-hippie-expand-function
                              '(try-complete-file-name-partially
                                try-complete-file-name
                                try-expand-dabbrev) t))
-;; Company expansion (currently doesn't work with python)
-(autoload 'company-mode "company" nil t)
-(autoload 'global-company-mode "company" nil t)
-(global-company-mode)
+;; Company expansion
+;; (autoload 'company-mode "company" nil t)
+;; (autoload 'global-company-mode "company" nil t)
+;; (global-company-mode)
 
 ;; (eval-after-load "company"
 ;;   '(progn
@@ -120,7 +118,7 @@
           (all-completions "" obarray 'commandp))))))
 
 ;; add a column of numbers
-(autoload 'sum-column "sum-column")
+(autoload 'sum-column "sum-column" "Sums a column" t)
 
 ;; better buffer names
 (require 'uniquify)
@@ -143,7 +141,9 @@
         ("*anything*" (same-frame t))
         ("*BBDB*" (same-frame t))
         ("*Deletions*" (same-frame t))
-        ("*Marked Processes*" (same-frame t))))
+        ("*Marked Processes*" (same-frame t))
+        ("*vc-diff*" (same-frame t))
+        ("*VC-log*" (same-frame t))))
 
 ;; Some Acme-style chords
 (require 'acme-mouse)
