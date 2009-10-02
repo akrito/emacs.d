@@ -36,9 +36,9 @@
 
 ;; sudo editing of local files
 ;; http://nflath.com/2009/08/tramp/
-(defun sudo-edit-current-file ()
-  (interactive)
-  (find-alternate-file (concat "/sudo:root@localhost:" (buffer-file-name (current-buffer)))))
+;; (defun sudo-edit-current-file ()
+;;   (interactive)
+;;   (find-alternate-file (concat "/sudo:root@localhost:" (buffer-file-name (current-buffer)))))
 
 ;; On X11, change the pointer to an arrow
 (if (boundp 'x-pointer-arrow)
@@ -131,6 +131,7 @@
 ;; ido.el - better buffer and filename completion
 (autoload 'ido-mode "ido")
 (ido-mode t)
+(setq ido-enable-tramp-completion nil)
 
 ;; one-to-one windows
 (setq pop-up-frames t)
