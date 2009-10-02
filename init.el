@@ -64,14 +64,6 @@
                              '(try-complete-file-name-partially
                                try-complete-file-name
                                try-expand-dabbrev) t))
-;; Company expansion
-;; (autoload 'company-mode "company" nil t)
-;; (autoload 'global-company-mode "company" nil t)
-;; (global-company-mode)
-
-;; (eval-after-load "company"
-;;   '(progn
-;;      (setq company-backends '(company-dabbrev-code))))
 
 ;; New ergonomic bindings
 ;;://xahlee.org/emacs/ergonomic_emacs_keybinding.html
