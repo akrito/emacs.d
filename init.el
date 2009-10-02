@@ -34,35 +34,12 @@
 (show-paren-mode t)
 (tool-bar-mode nil)
 
-;; sudo editing of local files
-;; http://nflath.com/2009/08/tramp/
-;; (defun sudo-edit-current-file ()
-;;   (interactive)
-;;   (find-alternate-file (concat "/sudo:root@localhost:" (buffer-file-name (current-buffer)))))
-
 ;; On X11, change the pointer to an arrow
 (if (boundp 'x-pointer-arrow)
     (progn
       (setq-default x-pointer-shape x-pointer-arrow)
       ;; hack to force the pointer shape to change
       (set-mouse-color "black")))
-
-;; wanderlust
-;; TODO remove conflicting C-O binding
-(autoload 'wl "wl" "Wanderlust" t)
-(autoload 'wl "mymail" "Wanderlust config" t)
-(autoload 'wl-other-frame "wl" "Wanderlust on new frame." t)
-(autoload 'wl-draft "wl-draft" "Write draft with Wanderlust." t)
-(autoload 'wl-user-agent-compose "wl-draft" nil t)
-(if (boundp 'mail-user-agent)
-    (setq mail-user-agent 'wl-user-agent))
-(if (fboundp 'define-mail-user-agent)
-    (define-mail-user-agent
-      'wl-user-agent
-      'wl-user-agent-compose
-      'wl-draft-send
-      'wl-draft-kill
-      'mail-send-hook))
 
 ;; github gists
 (autoload 'gist-region "gist" "Gist" t)
@@ -82,7 +59,6 @@
 ;; Rebind keys
 (global-set-key (kbd "C-!") 'shell-command)
 (global-set-key (kbd "C-|") 'shell-command-on-region)
-(global-set-key (kbd "C-c C-r") 'sudo-edit-current-file)
 ;; Hippie expansion
 (global-set-key (kbd "C-SPC") (make-hippie-expand-function
                              '(try-complete-file-name-partially
@@ -188,34 +164,8 @@
           '(lambda ()
              (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
 
-;; python
-;; (load "flymake" t)
-;; (defun flymake-pyflakes-init ()
-;;   (let* ((temp-file (flymake-init-create-temp-buffer-copy
-;;                      'flymake-create-temp-inplace))
-;;          (local-file (file-relative-name
-;;                       temp-file
-;;                       (file-name-directory buffer-file-name))))
-;;     (list "pyflakes" (list local-file))))
-;; (add-to-list 'flymake-allowed-file-name-masks
-;;              '("\\.py\\'" flymake-pyflakes-init))
-;; (add-hook 'find-file-hook 'flymake-find-file-hook)
-;; (add-hook 'python-mode-hook
-;;           '(lambda () (eldoc-mode 1)) t)
-;;(require 'pysmell)
- ;;(require 'pymacs)
-;; (autoload 'pymacs-apply "pymacs")
-;; (autoload 'pymacs-call "pymacs")
-;; (autoload 'pymacs-eval "pymacs" nil t)
-;; (autoload 'pymacs-exec "pymacs" nil t)
-;; (autoload 'pymacs-load "pymacs" nil t)
- ;;(pymacs-load "ropemacs" "rope-")
-
 ;; ruby
 (setq ruby-indent-level 4)
 
 ;; markdown
 (autoload 'markdown-mode "markdown-mode" "markdown" t)
-
-;; javascript
-;; TODO remove the mouse bindings that conflict with acme-mouse.el
