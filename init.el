@@ -1,7 +1,6 @@
 ;; Lisp setup
 (require 'cl)
 (add-to-list 'load-path "~/.emacs.d")
-;; (add-to-list 'load-path "~/.emacs.d/company")
 
 ;; Keep customizations in a separate file
 (setq custom-file "~/.emacs.d/emacs-custom.el")
@@ -54,7 +53,7 @@
 ;; Colors
 (require 'color-theme)
 (color-theme-initialize)
-(color-theme-arjen)
+(color-theme-dark-laptop)
 
 ;; Rebind keys
 (global-set-key (kbd "C-!") 'shell-command)
@@ -66,7 +65,7 @@
                                try-expand-dabbrev) t))
 
 ;; New ergonomic bindings
-;;://xahlee.org/emacs/ergonomic_emacs_keybinding.html
+;; http://xahlee.org/emacs/ergonomic_emacs_keybinding.html
 (load "ergonomic_keybinding_qwerty")
 ;; I don't like all of them
 (global-set-key (kbd "C-n") 'make-frame-command)
@@ -100,6 +99,17 @@
 (autoload 'ido-mode "ido")
 (ido-mode t)
 (setq ido-enable-tramp-completion nil)
+;; Use ido everywhere. May break things.
+;; http://stackoverflow.com/questions/905338/
+(defadvice completing-read
+  (around foo activate)
+  (if (boundp 'ido-cur-list)
+      ad-do-it
+    (setq ad-return-value
+          (ido-completing-read
+           prompt
+           (all-completions "" collection predicate)
+           nil require-match initial-input hist def))))
 
 ;; one-to-one windows
 (setq pop-up-frames t)

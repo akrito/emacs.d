@@ -5,6 +5,8 @@
   ;; If there is more than one, they won't work right.
  '(browse-url-browser-function (quote browse-url-generic))
  '(browse-url-generic-program "chromium")
+ '(color-theme-illegal-default-attributes (quote (:family :height :width :weight)))
+ '(color-theme-illegal-faces ".")
  '(fringe-mode 0 nil (fringe))
  '(ido-work-directory-list-ignore-regexps (quote ("^/s/")))
  '(mode-line-format (quote ("%e" (buffer-file-truename "%f" "%b") #("-%*-" 0 4 (auto-composed t)) (vc-mode vc-mode) #("--" 0 2 (auto-composed t)) mode-line-modes #("%-" 0 2 (auto-composed t)))))
