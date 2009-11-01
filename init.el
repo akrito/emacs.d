@@ -48,12 +48,16 @@
 
 ;; Highlight the current line
 (global-hl-line-mode t)
+;; For a dark background
 (set-face-background 'hl-line "#333333")
+;; For a light background
+;;(set-face-background 'hl-line "#dddddd")
 
 ;; Colors
 (require 'color-theme)
 (color-theme-initialize)
 (color-theme-dark-laptop)
+;;(color-theme-aalto-light)
 
 ;; Rebind keys
 (global-set-key (kbd "C-!") 'shell-command)
@@ -83,6 +87,15 @@
          (ido-completing-read
           "M-a "
           (all-completions "" obarray 'commandp))))))
+(add-hook 'org-mode-hook
+          '(lambda ()
+             (define-key org-mode-map "\M-a" (lambda ()
+       (interactive)
+       (call-interactively
+        (intern
+         (ido-completing-read
+          "M-a "
+          (all-completions "" obarray 'commandp))))))))
 
 ;; add a column of numbers
 (autoload 'sum-column "sum-column" "Sums a column" t)
@@ -99,17 +112,17 @@
 (autoload 'ido-mode "ido")
 (ido-mode t)
 (setq ido-enable-tramp-completion nil)
-;; Use ido everywhere. May break things.
+;; Use ido everywhere. May break things. Breaks vc-status.
 ;; http://stackoverflow.com/questions/905338/
-(defadvice completing-read
-  (around foo activate)
-  (if (boundp 'ido-cur-list)
-      ad-do-it
-    (setq ad-return-value
-          (ido-completing-read
-           prompt
-           (all-completions "" collection predicate)
-           nil require-match initial-input hist def))))
+;; (defadvice completing-read
+;;   (around foo activate)
+;;   (if (boundp 'ido-cur-list)
+;;       ad-do-it
+;;     (setq ad-return-value
+;;           (ido-completing-read
+;;            prompt
+;;            (all-completions "" collection predicate)
+;;            nil require-match initial-input hist def))))
 
 ;; one-to-one windows
 (setq pop-up-frames t)

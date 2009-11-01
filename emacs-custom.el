@@ -11,7 +11,7 @@
  '(ido-work-directory-list-ignore-regexps (quote ("^/s/")))
  '(mode-line-format (quote ("%e" (buffer-file-truename "%f" "%b") #("-%*-" 0 4 (auto-composed t)) (vc-mode vc-mode) #("--" 0 2 (auto-composed t)) mode-line-modes #("%-" 0 2 (auto-composed t)))))
  '(mouse-wheel-scroll-amount (quote (2 ((shift) . 1) ((control)))))
- '(org-agenda-files (quote ("~/wiki/wiki.org_archive")))
+ '(org-agenda-files (quote ("~/wiki/wiki.org_archive")) t)
  '(speedbar-hide-button-brackets-flag t)
  '(speedbar-indentation-width 2)
  '(speedbar-show-unknown-files t)
