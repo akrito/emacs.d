@@ -7,7 +7,6 @@
 (load custom-file 'noerror)
 
 ;; Manual customizations
-(blink-cursor-mode nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 (menu-bar-mode nil)
 (server-start)
@@ -46,17 +45,27 @@
 (autoload 'gist-region-or-buffer "gist" "Gist" t)
 (autoload 'gist-region-or-buffer-private "gist" "Gist" t)
 
+;; magit
+(autoload 'magit-status "magit" nil t)
+
+;; iedit
+(autoload 'iedit-mode "iedit" nil t)
+(define-key global-map (kbd "C-;") 'iedit-mode)
+
 ;; Highlight the current line
 (global-hl-line-mode t)
 ;; For a dark background
-(set-face-background 'hl-line "#333333")
+;;(set-face-background 'hl-line "#333333")
 ;; For a light background
-;;(set-face-background 'hl-line "#dddddd")
+(set-face-background 'hl-line "#dddddd")
 
 ;; Colors
 (require 'color-theme)
 (color-theme-initialize)
-(color-theme-dark-laptop)
+;;(load-file "~/.emacs.d/themes/zen-and-art.el")
+;;(color-theme-zen-and-art)
+;;(color-theme-gtk-ide)
+;;(color-theme-dark-laptop)
 ;;(color-theme-aalto-light)
 
 ;; Rebind keys
@@ -78,6 +87,7 @@
 (global-set-key (kbd "M-l") 'forward-char)
 (global-set-key (kbd "M-k") 'previous-line)
 (global-set-key (kbd "M-j") 'next-line)
+(global-set-key (kbd "M-g") 'goto-line)
 (global-set-key
      "\M-a"
      (lambda ()
@@ -135,10 +145,34 @@
         ("*Deletions*" (same-frame t))
         ("*Marked Processes*" (same-frame t))
         ("*vc-diff*" (same-frame t))
-        ("*VC-log*" (same-frame t))))
+        ("*VC-log*" (same-frame t))
+        ("*magit-log-edit*" (same-frame t))
+        ("*magit-diff*" (same-frame t))
+        ("*magit-commit*" (same-frame t))))
 
 ;; Some Acme-style chords
 (require 'acme-mouse)
+
+;; clojure
+;;(add-to-list 'load-path "~/opt/clojure-mode")
+(require 'clojure-mode)
+(add-to-list 'load-path "~/src/swank-clojure")
+(setq swank-clojure-jar-path "~/src/clojure/clojure.jar")
+;;      swank-clojure-extra-classpaths (list
+;;				      "~/src/swank-clojure/src/swank"
+;;				      "~/src/clojure-contrib/clojure-contrib.jar"))
+(require 'swank-clojure-autoload)
+;;(eval-after-load "slime"
+;;  '(progn (slime-setup '(slime-repl))))
+;;(add-to-list 'load-path "~/opt/slime")
+;;(require 'slime)
+;;(slime-setup)
+;;(clojure-slime-config)
+
+;; Midnight mode
+(midnight-delay-set 'midnight-delay "12:00am")
+(add-to-list 'clean-buffer-list-kill-regexps
+                 "\\*magit.*\\*")
 
 ;; File type support
 
