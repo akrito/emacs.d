@@ -52,19 +52,26 @@
 (autoload 'iedit-mode "iedit" nil t)
 (define-key global-map (kbd "C-;") 'iedit-mode)
 
+;; chrome support
+(if (locate-library "edit-server")
+   (progn
+     (require 'edit-server)
+     (setq edit-server-new-frame nil)
+     (edit-server-start)))
+
 ;; Highlight the current line
 (global-hl-line-mode t)
 ;; For a dark background
 ;;(set-face-background 'hl-line "#333333")
 ;; For a light background
-(set-face-background 'hl-line "#dddddd")
+(set-face-background 'hl-line "#eeeeee")
 
 ;; Colors
 (require 'color-theme)
 (color-theme-initialize)
 ;;(load-file "~/.emacs.d/themes/zen-and-art.el")
 ;;(color-theme-zen-and-art)
-;;(color-theme-gtk-ide)
+(color-theme-gtk-ide)
 ;;(color-theme-dark-laptop)
 ;;(color-theme-aalto-light)
 
@@ -175,6 +182,10 @@
                  "\\*magit.*\\*")
 
 ;; File type support
+
+;; Better Python support
+;;(require 'pymacs)
+;;(pymacs-load "ropemacs" "rope-")
 
 ;; Varnish conf support
 (autoload 'vcl-mode "vcl-mode" "Edit Varnish VCL files" t)

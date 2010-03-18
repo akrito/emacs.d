@@ -282,6 +282,7 @@
 
 ;; isearch
 (global-set-key (kbd "M-;") 'isearch-forward)
+(global-set-key (kbd "C-f") 'isearch-forward)
 (global-set-key (kbd "M-:") 'isearch-backward)
 
 (global-set-key (kbd "M-p")
@@ -410,6 +411,7 @@
 (add-hook 'isearch-mode-hook
  (lambda ()
  (define-key isearch-mode-map (kbd "M-;") 'isearch-repeat-forward)
+ (define-key isearch-mode-map (kbd "C-f") 'isearch-repeat-forward)
  (define-key isearch-mode-map (kbd "M-:") 'isearch-repeat-backward)
 
  (define-key isearch-mode-map (kbd "M-p") 'recenter) ; was isearch-ring-retreat
@@ -556,6 +558,7 @@
 ; M-n message-display-abbrev
  (lambda ()
  (define-key message-mode-map (kbd "M-;") 'isearch-repeat-forward)
+ (define-key message-mode-map (kbd "C-f") 'isearch-repeat-forward)
  ))
 
 ;; nothing to fix: c-mode, c++-mode, java, sh, js, perl, php, python
