@@ -32,15 +32,16 @@
 (show-paren-mode t)
 (tool-bar-mode nil)
 
-;; On X11, change the pointer to an arrow
-(if (boundp 'x-pointer-arrow)
-    (progn
-      (setq-default x-pointer-shape x-pointer-arrow)
-      ;; hack to force the pointer shape to change
-      (set-mouse-color "black")))
+; ;; On X11, change the pointer to an arrow
+; (if (boundp 'x-pointer-arrow)
+;     (progn
+;       (setq-default x-pointer-shape x-pointer-arrow)
+;       ;; hack to force the pointer shape to change
+;       (set-mouse-color "black")))
 
 ;; github gists
 (autoload 'gist-region "gist" "Gist" t)
+(autoload 'gist-list "gist" "Gist" t)
 (autoload 'gist-region-private "gist" "Gist" t)
 (autoload 'gist-region-or-buffer "gist" "Gist" t)
 (autoload 'gist-region-or-buffer-private "gist" "Gist" t)
@@ -48,31 +49,31 @@
 ;; magit
 (autoload 'magit-status "magit" nil t)
 
-;; iedit
-(autoload 'iedit-mode "iedit" nil t)
-(define-key global-map (kbd "C-;") 'iedit-mode)
-
-;; chrome support
-(if (locate-library "edit-server")
-   (progn
-     (require 'edit-server)
-     (setq edit-server-new-frame nil)
-     (edit-server-start)))
-
-;; Highlight the current line
-(global-hl-line-mode t)
-;; For a dark background
-;;(set-face-background 'hl-line "#333333")
-;; For a light background
-(set-face-background 'hl-line "#eeeeee")
-
-;; Colors
+; ;; iedit
+; (autoload 'iedit-mode "iedit" nil t)
+; (define-key global-map (kbd "C-;") 'iedit-mode)
+; 
+; ;; chrome support
+; ; (if (locate-library "edit-server")
+; ;    (progn
+; ;      (require 'edit-server)
+; ;      (setq edit-server-new-frame nil)
+; ;      (edit-server-start)))
+; 
+; ;; Highlight the current line
+; (global-hl-line-mode t)
+; ;; For a dark background
+; ;;(set-face-background 'hl-line "#333333")
+; ;; For a light background
+; (set-face-background 'hl-line "#eeeeee")
+; 
+; ;; Colors
 (require 'color-theme)
 (color-theme-initialize)
-;;(load-file "~/.emacs.d/themes/zen-and-art.el")
-;;(color-theme-zen-and-art)
+(load-file "~/.emacs.d/themes/zen-and-art.el")
+(color-theme-zen-and-art)
 (color-theme-gtk-ide)
-;;(color-theme-dark-laptop)
+(color-theme-dark-laptop)
 ;;(color-theme-aalto-light)
 
 ;; Rebind keys
@@ -114,8 +115,8 @@
           "M-a "
           (all-completions "" obarray 'commandp))))))))
 
-;; add a column of numbers
-(autoload 'sum-column "sum-column" "Sums a column" t)
+; ;; add a column of numbers
+; (autoload 'sum-column "sum-column" "Sums a column" t)
 
 ;; better buffer names
 (require 'uniquify)
@@ -128,75 +129,64 @@
 ;; ido.el - better buffer and filename completion
 (autoload 'ido-mode "ido")
 (ido-mode t)
-(setq ido-enable-tramp-completion nil)
-;; Use ido everywhere. May break things. Breaks vc-status.
-;; http://stackoverflow.com/questions/905338/
-;; (defadvice completing-read
-;;   (around foo activate)
-;;   (if (boundp 'ido-cur-list)
-;;       ad-do-it
-;;     (setq ad-return-value
-;;           (ido-completing-read
-;;            prompt
-;;            (all-completions "" collection predicate)
-;;            nil require-match initial-input hist def))))
+;(setq ido-enable-tramp-completion nil)
 
-;; one-to-one windows
-(setq pop-up-frames t)
-(setq special-display-buffer-names
-      '(
-        ("*Completions*" (same-frame t))
-        ("*Ido Completions*" (same-frame t))
-        ("*anything*" (same-frame t))
-        ("*BBDB*" (same-frame t))
-        ("*Deletions*" (same-frame t))
-        ("*Marked Processes*" (same-frame t))
-        ("*vc-diff*" (same-frame t))
-        ("*VC-log*" (same-frame t))
-        ("*magit-log-edit*" (same-frame t))
-        ("*magit-diff*" (same-frame t))
-        ("*magit-commit*" (same-frame t))))
-
-;; Some Acme-style chords
-(require 'acme-mouse)
-
-;; clojure
-;;(add-to-list 'load-path "~/opt/clojure-mode")
-(require 'clojure-mode)
-(add-to-list 'load-path "~/src/swank-clojure")
-(setq swank-clojure-jar-path "~/src/clojure/clojure.jar")
-;;      swank-clojure-extra-classpaths (list
-;;				      "~/src/swank-clojure/src/swank"
-;;				      "~/src/clojure-contrib/clojure-contrib.jar"))
-(require 'swank-clojure-autoload)
-;;(eval-after-load "slime"
-;;  '(progn (slime-setup '(slime-repl))))
-;;(add-to-list 'load-path "~/opt/slime")
-;;(require 'slime)
-;;(slime-setup)
-;;(clojure-slime-config)
-
-;; Midnight mode
-(midnight-delay-set 'midnight-delay "12:00am")
-(add-to-list 'clean-buffer-list-kill-regexps
-                 "\\*magit.*\\*")
-
-;; File type support
-
-;; Better Python support
-;;(require 'pymacs)
-;;(pymacs-load "ropemacs" "rope-")
-
-;; Varnish conf support
-(autoload 'vcl-mode "vcl-mode" "Edit Varnish VCL files" t)
-(add-to-list 'auto-mode-alist '("\\.vcl$" . vcl-mode))
-
-;; Lua support
-(autoload 'lua-mode "lua-mode" "Edit Lua scripts" t)
-(add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
-
-;; Apache conf support
-(autoload 'apache-mode "apache-mode" "Edit Apache confs" t)
+; ;; one-to-one windows
+; (setq pop-up-frames t)
+; (setq special-display-buffer-names
+;       '(
+;         ("*Completions*" (same-frame t))
+;         ("*Ido Completions*" (same-frame t))
+;         ("*anything*" (same-frame t))
+;         ("*BBDB*" (same-frame t))
+;         ("*Deletions*" (same-frame t))
+;         ("*Marked Processes*" (same-frame t))
+;         ("*vc-diff*" (same-frame t))
+;         ("*VC-log*" (same-frame t))
+;         ("*magit-log-edit*" (same-frame t))
+;         ("*magit-diff*" (same-frame t))
+;         ("*magit-commit*" (same-frame t))))
+ 
+ ;; Some Acme-style chords
+ (require 'acme-mouse)
+ 
+; ;; clojure
+; ;;(add-to-list 'load-path "~/opt/clojure-mode")
+; ;;(require 'clojure-mode)
+; ;;(add-to-list 'load-path "~/src/swank-clojure")
+; ;;(setq swank-clojure-jar-path "~/src/clojure/clojure.jar")
+; ;;      swank-clojure-extra-classpaths (list
+; ;;				      "~/src/swank-clojure/src/swank"
+; ;;				      "~/src/clojure-contrib/clojure-contrib.jar"))
+; ;;(require 'swank-clojure-autoload)
+; ;;(eval-after-load "slime"
+; ;;  '(progn (slime-setup '(slime-repl))))
+; ;;(add-to-list 'load-path "~/opt/slime")
+; ;;(require 'slime)
+; ;;(slime-setup)
+; ;;(clojure-slime-config)
+; 
+; ;; Midnight mode
+; (midnight-delay-set 'midnight-delay "12:00am")
+; (add-to-list 'clean-buffer-list-kill-regexps
+;                  "\\*magit.*\\*")
+; 
+; ;; File type support
+; 
+; ;; Better Python support
+; ;;(require 'pymacs)
+; ;;(pymacs-load "ropemacs" "rope-")
+; 
+; ;; Varnish conf support
+; (autoload 'vcl-mode "vcl-mode" "Edit Varnish VCL files" t)
+; (add-to-list 'auto-mode-alist '("\\.vcl$" . vcl-mode))
+; 
+; ;; Lua support
+; (autoload 'lua-mode "lua-mode" "Edit Lua scripts" t)
+; (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+; 
+; ;; Apache conf support
+; (autoload 'apache-mode "apache-mode" "Edit Apache confs" t)
 
 ;; Haskell
 (autoload 'haskell-mode "~/.emacs.d/haskell-mode/haskell-site-file" "Haskell mode" t)
@@ -205,16 +195,16 @@
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
 
-;; org mode
-(setq org-agenda-files (list "~/work.org" "~/work.org_archive"))
-(setq org-hide-leading-stars t)
-(setq org-log-done t)
-(setq org-agenda-skip-archived-trees nil)
-(setq org-highlight-sparse-tree-matches nil)
-(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-
-;; restructured text
-(autoload 'rst-mode "rst" "restructured text" t)
+; ;; org mode
+; (setq org-agenda-files (list "~/work.org" "~/work.org_archive"))
+; (setq org-hide-leading-stars t)
+; (setq org-log-done t)
+; (setq org-agenda-skip-archived-trees nil)
+; (setq org-highlight-sparse-tree-matches nil)
+; (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+; 
+; ;; restructured text
+; (autoload 'rst-mode "rst" "restructured text" t)
 
 ;; yaml
 (autoload 'yaml-mode "yaml-mode" "YAML Ain't Markup Language" t)
@@ -227,5 +217,5 @@
 ;; ruby
 (setq ruby-indent-level 4)
 
-;; markdown
-(autoload 'markdown-mode "markdown-mode" "markdown" t)
+; ;; markdown
+; (autoload 'markdown-mode "markdown-mode" "markdown" t)
