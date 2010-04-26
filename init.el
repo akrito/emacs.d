@@ -62,19 +62,19 @@
 ; ;      (edit-server-start)))
 ; 
 ; ;; Highlight the current line
-; (global-hl-line-mode t)
-; ;; For a dark background
-; ;;(set-face-background 'hl-line "#333333")
-; ;; For a light background
-; (set-face-background 'hl-line "#eeeeee")
-; 
+(global-hl-line-mode t)
+;; For a dark background
+(set-face-background 'hl-line "#000000")
+;; For a light background
+;;(set-face-background 'hl-line "#eeeeee")
+
 ; ;; Colors
 (require 'color-theme)
 (color-theme-initialize)
 (load-file "~/.emacs.d/themes/zen-and-art.el")
 (color-theme-zen-and-art)
-(color-theme-gtk-ide)
-(color-theme-dark-laptop)
+;;(color-theme-gtk-ide)
+;;(color-theme-dark-laptop)
 ;;(color-theme-aalto-light)
 
 ;; Rebind keys
