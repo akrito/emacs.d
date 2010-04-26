@@ -133,24 +133,24 @@
 (ido-mode t)
 ;(setq ido-enable-tramp-completion nil)
 
-; ;; one-to-one windows
-; (setq pop-up-frames t)
-; (setq special-display-buffer-names
-;       '(
-;         ("*Completions*" (same-frame t))
-;         ("*Ido Completions*" (same-frame t))
-;         ("*anything*" (same-frame t))
-;         ("*BBDB*" (same-frame t))
-;         ("*Deletions*" (same-frame t))
-;         ("*Marked Processes*" (same-frame t))
-;         ("*vc-diff*" (same-frame t))
-;         ("*VC-log*" (same-frame t))
-;         ("*magit-log-edit*" (same-frame t))
-;         ("*magit-diff*" (same-frame t))
-;         ("*magit-commit*" (same-frame t))))
- 
- ;; Some Acme-style chords
- (require 'acme-mouse)
+;; one-to-one windows
+(setq pop-up-frames t)
+(setq special-display-buffer-names
+      '(
+        ("*Completions*" (same-frame t))
+        ("*Ido Completions*" (same-frame t))
+        ("*anything*" (same-frame t))
+        ("*BBDB*" (same-frame t))
+        ("*Deletions*" (same-frame t))
+        ("*Marked Processes*" (same-frame t))
+        ("*vc-diff*" (same-frame t))
+        ("*VC-log*" (same-frame t))
+        ("*magit-log-edit*" (same-frame t))
+        ("*magit-diff*" (same-frame t))
+        ("*magit-commit*" (same-frame t))))
+
+;; Some Acme-style chords
+(require 'acme-mouse)
  
 ; ;; clojure
 ; ;;(add-to-list 'load-path "~/opt/clojure-mode")
