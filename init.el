@@ -30,14 +30,15 @@
               indent-tabs-mode nil
               show-trailing-whitespace t)
 (show-paren-mode t)
-(tool-bar-mode nil)
+(tool-bar-mode -1)
+(blink-cursor-mode -1)
 
-; ;; On X11, change the pointer to an arrow
-; (if (boundp 'x-pointer-arrow)
-;     (progn
-;       (setq-default x-pointer-shape x-pointer-arrow)
-;       ;; hack to force the pointer shape to change
-;       (set-mouse-color "black")))
+;; On X11, change the pointer to an arrow
+(if (boundp 'x-pointer-arrow)
+    (progn
+      (setq-default x-pointer-shape x-pointer-arrow)
+      ;; hack to force the pointer shape to change
+      (set-mouse-color "black")))
 
 ;; github gists
 (autoload 'gist-region "gist" "Gist" t)
