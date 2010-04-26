@@ -8,7 +8,6 @@
 
 ;; Manual customizations
 (fset 'yes-or-no-p 'y-or-n-p)
-(menu-bar-mode nil)
 (server-start)
 (set-scroll-bar-mode nil)
 (setq custom-raised-buttons nil
@@ -33,12 +32,13 @@
 (tool-bar-mode -1)
 (blink-cursor-mode -1)
 
-;; On X11, change the pointer to an arrow
+;; On X11, change the pointer to an arrow, and remove the menu bar
 (if (boundp 'x-pointer-arrow)
     (progn
       (setq-default x-pointer-shape x-pointer-arrow)
       ;; hack to force the pointer shape to change
-      (set-mouse-color "black")))
+      (set-mouse-color "black")
+      (menu-bar-mode -1)))
 
 ;; github gists
 (autoload 'gist-region "gist" "Gist" t)
