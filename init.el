@@ -166,14 +166,14 @@
 ; ;;(require 'slime)
 ; ;;(slime-setup)
 ; ;;(clojure-slime-config)
-; 
-; ;; Midnight mode
-; (midnight-delay-set 'midnight-delay "12:00am")
-; (add-to-list 'clean-buffer-list-kill-regexps
-;                  "\\*magit.*\\*")
-; 
-; ;; File type support
-; 
+
+;; Midnight mode
+(midnight-delay-set 'midnight-delay "12:00am")
+(add-to-list 'clean-buffer-list-kill-regexps
+                 "\\*magit.*\\*")
+
+;; File type support
+
 ; ;; Better Python support
 ; ;;(require 'pymacs)
 ; ;;(pymacs-load "ropemacs" "rope-")
@@ -196,14 +196,14 @@
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
 
-; ;; org mode
-; (setq org-agenda-files (list "~/work.org" "~/work.org_archive"))
-; (setq org-hide-leading-stars t)
-; (setq org-log-done t)
-; (setq org-agenda-skip-archived-trees nil)
-; (setq org-highlight-sparse-tree-matches nil)
-; (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-; 
+;; org mode
+(setq org-agenda-files (list "~/work.org" "~/work.org_archive"))
+(setq org-hide-leading-stars t)
+(setq org-log-done t)
+(setq org-agenda-skip-archived-trees nil)
+(setq org-highlight-sparse-tree-matches nil)
+(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+
 ; ;; restructured text
 ; (autoload 'rst-mode "rst" "restructured text" t)
 
