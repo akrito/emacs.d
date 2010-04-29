@@ -49,7 +49,6 @@
 
 ;; magit
 (autoload 'magit-status "magit" nil t)
-(global-set-key (kbd "M-m") 'magit-status)
  
 ; ;; iedit
 ; (autoload 'iedit-mode "iedit" nil t)
@@ -98,6 +97,7 @@
 (global-set-key (kbd "M-k") 'previous-line)
 (global-set-key (kbd "M-j") 'next-line)
 (global-set-key (kbd "M-g") 'goto-line)
+(global-set-key (kbd "M-m") 'magit-status)
 (global-set-key
      "\M-a"
      (lambda ()
