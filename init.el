@@ -140,6 +140,7 @@
 ;; ido.el - better buffer and filename completion
 (autoload 'ido-mode "ido")
 (ido-mode t)
+(setq ido-max-directory-size 200000)
 ;(setq ido-enable-tramp-completion nil)
 
 ;; one-to-one windows
