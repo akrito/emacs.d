@@ -1,1 +1,1 @@
-/home/alex/src/magit/magit.el
+magit/magit.el
