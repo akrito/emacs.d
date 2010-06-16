@@ -98,12 +98,15 @@
 ;; I don't like all of them
 (global-set-key (kbd "C-n") 'make-frame-command)
 (global-set-key (kbd "C-b") 'switch-to-buffer)
+(global-set-key (kbd "M-b") 'bookmark-jump)
 (global-set-key (kbd "M-h") 'backward-char)
 (global-set-key (kbd "M-l") 'forward-char)
 (global-set-key (kbd "M-k") 'previous-line)
 (global-set-key (kbd "M-j") 'next-line)
 (global-set-key (kbd "M-g") 'goto-line)
 (global-set-key (kbd "M-m") 'magit-status)
+(global-set-key (kbd "M-r") 'rgrep)
+(global-set-key (kbd "M-t") 'revert-buffer)
 (global-set-key
      "\M-a"
      (lambda ()
