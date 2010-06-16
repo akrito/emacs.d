@@ -72,19 +72,21 @@
 ;; For a light background
 ;;(set-face-background 'hl-line "#eeeeee")
 
-; ;; Colors
+;; Colors
 (require 'color-theme)
 (color-theme-initialize)
 (load-file "~/.emacs.d/themes/zen-and-art.el")
 (color-theme-zen-and-art)
-;;(color-theme-gtk-ide)
-;;(color-theme-dark-laptop)
-;;(color-theme-aalto-light)
+;; (color-theme-late-night)
+;; (color-theme-charcoal-black)
+;; (color-theme-gtk-ide)
+;; (color-theme-dark-laptop)
+;; (color-theme-aalto-light)
 
 ;; Rebind keys
 (global-set-key (kbd "C-!") 'shell-command)
 (global-set-key (kbd "C-|") 'shell-command-on-region)
-;; Hippie expansion
+;; Completion
 (global-set-key (kbd "C-SPC") (make-hippie-expand-function
                              '(try-complete-file-name-partially
                                try-complete-file-name
