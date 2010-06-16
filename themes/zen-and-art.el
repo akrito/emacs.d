@@ -1,1 +1,1 @@
-/home/alex/src/zen-and-art/zen-and-art.el
+../zen-and-art/zen-and-art.el
