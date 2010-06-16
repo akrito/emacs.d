@@ -8,6 +8,7 @@
 
 ;; Manual customizations
 (fset 'yes-or-no-p 'y-or-n-p)
+(global-auto-revert-mode 1)
 (server-start)
 (set-scroll-bar-mode nil)
 (setq custom-raised-buttons nil
@@ -38,7 +39,9 @@
       (setq-default x-pointer-shape x-pointer-arrow)
       ;; hack to force the pointer shape to change
       (set-mouse-color "black")
-      (menu-bar-mode -1)))
+      (menu-bar-mode 1)))
+
+(setq auto-save-list-file-prefix nil)
 
 ;; github gists
 (autoload 'gist-region "gist" "Gist" t)
@@ -49,20 +52,21 @@
 
 ;; magit
 (autoload 'magit-status "magit" nil t)
- 
+
 ; ;; iedit
 ; (autoload 'iedit-mode "iedit" nil t)
 ; (define-key global-map (kbd "C-;") 'iedit-mode)
-; 
+;
 ; ;; chrome support
 ; ; (if (locate-library "edit-server")
 ; ;    (progn
 ; ;      (require 'edit-server)
 ; ;      (setq edit-server-new-frame nil)
 ; ;      (edit-server-start)))
-; 
+;
 ; ;; Highlight the current line
 (global-hl-line-mode t)
+(setq show-trailing-whitespace t)
 ;; For a dark background
 (set-face-background 'hl-line "#000000")
 ;; For a light background
