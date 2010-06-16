@@ -219,5 +219,14 @@
 ;; ruby
 (setq ruby-indent-level 4)
 
-; ;; markdown
-; (autoload 'markdown-mode "markdown-mode" "markdown" t)
+;; markdown
+(autoload 'markdown-mode "markdown-mode" "markdown" t)
+(add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
+
+;; TeX
+(defun flymake-get-tex-args (file-name)
+(list "pdflatex"
+(list "-file-line-error" "-interaction=nonstopmode" file-name)))
+ 
+(add-hook 'LaTeX-mode-hook 'flymake-mode)
+(add-hook 'LaTeX-mode-hook 'flyspell-mode)
