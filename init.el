@@ -161,7 +161,7 @@
 
 ;; Some Acme-style chords
 (require 'acme-mouse)
- 
+
 ; ;; clojure
 ; ;;(add-to-list 'load-path "~/opt/clojure-mode")
 ; ;;(require 'clojure-mode)
@@ -183,20 +183,116 @@
 (add-to-list 'clean-buffer-list-kill-regexps
                  "\\*magit.*\\*")
 
+;; yasnippet
+(add-to-list 'load-path "~/.emacs.d/yasnippet-0.6.1c")
+(require 'yasnippet)
+(yas/initialize)
+(yas/load-directory "~/.emacs.d/snippets")
+
 ;; File type support
 
-; ;; Better Python support
-; ;;(require 'pymacs)
-; ;;(pymacs-load "ropemacs" "rope-")
-; 
+;; Better Python support
+;; This is on by default in Emacs 23.2, I hear
+(ansi-color-for-comint-mode-on) 
+;; __IPYTHON__ will return the interpreter in both ipython and ipdb. __IP only
+;; works for ipython
+(setq ipython-completion-command-string "print(';'.join(__IPYTHON__.Completer.all_completions('%s')))\n")
+(defun ipython-complete ()
+    "Try to complete the python symbol before point. Only knows about the stuff
+in the current *Python* session."
+    (interactive)
+    (let* ((ugly-return nil)
+           (sep ";")
+           (python-process (or (get-buffer-process (current-buffer))
+                                        ;XXX hack for .py buffers
+                               (get-process py-which-bufname)))
+           ;; XXX currently we go backwards to find the beginning of an
+           ;; expression part; a more powerful approach in the future might be
+           ;; to let ipython have the complete line, so that context can be used
+           ;; to do things like filename completion etc.
+           (beg (save-excursion (skip-chars-backward "a-z0-9A-Z_./" (point-at-bol))
+                                (point)))
+           (end (point))
+           (pattern (buffer-substring-no-properties beg end))
+           (completions nil)
+           (completion-table nil)
+           completion
+         (comint-preoutput-filter-functions
+          (append comint-preoutput-filter-functions
+                  '(ansi-color-filter-apply
+                    (lambda (string)
+                      (setq ugly-return (concat ugly-return string))
+                      "")))))
+      (process-send-string python-process
+                            (format ipython-completion-command-string pattern))
+      (accept-process-output python-process)
+      (setq completions
+            (split-string (substring ugly-return 0 (position ?\n ugly-return)) sep))
+      (setq completion-table (loop for str in completions
+                                   collect (list str nil)))
+      (setq completion (try-completion pattern completion-table))
+      (cond ((eq completion t))
+            ((null completion)
+             (message "Can't find completion for \"%s\"" pattern)
+             (ding))
+            ((not (string= pattern completion))
+             (delete-region beg end)
+             (insert completion))
+            (t
+             (setq completion
+                   (ido-completing-read pattern 
+                                        (all-completions pattern completion-table)))
+             (delete-region beg end)
+             (insert completion)))))
+
+(defun better-pdb-breakpoints ()
+  (gud-def gud-break  "break %d/%f:%l"  "\C-b" "Set breakpoint at current line.")
+  (gud-def gud-remove "clear %d/%f:%l"  "\C-d" "Remove breakpoint at current line")
+  )
+(add-hook 'pdb-mode-hook 'better-pdb-breakpoints)
+;; (defun ipython-shell-hook ()
+;;       ;; the following is to synchronize dir-changes
+;;       (make-local-variable 'shell-dirstack)
+;;       (setq shell-dirstack nil)
+;;       (make-local-variable 'shell-last-dir)
+;;       (setq shell-last-dir nil)
+;;       (make-local-variable 'shell-dirtrackp)
+;;       (setq shell-dirtrackp t)
+;;       (add-hook 'comint-input-filter-functions 'shell-directory-tracker nil t)
+
+;;       (ansi-color-for-comint-mode-on)
+;;       (define-key python-shell-map [tab] 'ipython-complete)
+;;       ;; Add this so that tab-completion works both in X11 frames and inside
+;;       ;; terminals (such as when emacs is called with -nw).
+;;       (define-key python-shell-map "\t" 'ipython-complete)
+
+;; (add-hook 'python-shell-hook 'ipython-shell-hook)
+(require 'virtualenv)
+(set-variable 'virtualenv-root-dir "/home/alex/v/")
+(defun workon-postactivate (virtualenv)
+  (require 'virtualenv)
+  (virtualenv-activate-environment virtualenv))
+
+(require 'pymacs)
+(pymacs-load "ropemacs" "rope-")
+(setq ropemacs-enable-autoimport t)
+
+(add-to-list 'load-path "~/.emacs.d/auto-complete-1.3")
+(require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete-1.3/dict")
+(ac-config-default)
+(global-auto-complete-mode 1)
+
+(setq python-check-command "pyflakes")
+
 ; ;; Varnish conf support
 ; (autoload 'vcl-mode "vcl-mode" "Edit Varnish VCL files" t)
 ; (add-to-list 'auto-mode-alist '("\\.vcl$" . vcl-mode))
-; 
+;
 ; ;; Lua support
 ; (autoload 'lua-mode "lua-mode" "Edit Lua scripts" t)
 ; (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
-; 
+;
 ; ;; Apache conf support
 ; (autoload 'apache-mode "apache-mode" "Edit Apache confs" t)
 
