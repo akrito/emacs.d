@@ -51,12 +51,19 @@
 
 (defconst virtualenv-default-interpreter python-python-command)
 (defconst virtualenv-default-interpreter-args python-python-command-args)
+(defconst virtualenv-default-debugger "pdb")
 
 (defun virtualenv-get-interpreter (virtualenv)
   (if (and virtualenv-use-ipython
            (file-exists-p (concat virtualenv "/bin/ipython")))
       (concat virtualenv "/bin/ipython")
     (concat virtualenv "/bin/python")))
+
+(defun virtualenv-get-debugger (virtualenv)
+  (if (and virtualenv-use-ipython
+           (file-exists-p (concat virtualenv "/bin/ipdb")))
+      (concat virtualenv "/bin/ipdb")
+    (concat virtualenv "/bin/pdb")))
 
 (defun virtualenv-get-interpreter-args (virtualenv)
   (if (and virtualenv-use-ipython
@@ -68,11 +75,14 @@
   (if (null virtualenv)
       (progn 
         (setq python-python-command virtualenv-default-interpreter)
-        (setq python-python-command-args virtualenv-default-interpreter-args))
+        (setq python-python-command-args virtualenv-default-interpreter-args)
+        (setq gud-pdb-command-name virtualenv-default-debugger))
     (let ((interpreter (virtualenv-get-interpreter virtualenv))
-          (interpreter-args (virtualenv-get-interpreter-args virtualenv)))
+          (interpreter-args (virtualenv-get-interpreter-args virtualenv))
+          (debugger (virtualenv-get-debugger virtualenv)))
       (setq python-python-command interpreter)
-      (setq python-python-command-args interpreter-args))))
+      (setq python-python-command-args interpreter-args)
+      (setq gud-pdb-command-name debugger))))
 
 (defun virtualenv-activate-environment (virtualenv)
   (virtualenv-set-interpreter virtualenv)
