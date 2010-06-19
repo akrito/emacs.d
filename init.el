@@ -198,9 +198,10 @@
 ;; yasnippet
 (add-to-list 'load-path "~/.emacs.d/yasnippet-0.6.1c")
 (require 'yasnippet)
+(setq yas/trigger-key (kbd "C-c <kp-multiply>"))
 (yas/initialize)
 (yas/load-directory "~/.emacs.d/snippets")
-
+(setq yas/indent-line 'none)
 ;; File type support
 
 ;; Better Python support
