@@ -258,11 +258,31 @@ in the current *Python* session."
              (delete-region beg end)
              (insert completion)))))
 
-(defun better-pdb-breakpoints ()
+(defun better-pdb ()
   (gud-def gud-break  "break %d/%f:%l"  "\C-b" "Set breakpoint at current line.")
   (gud-def gud-remove "clear %d/%f:%l"  "\C-d" "Remove breakpoint at current line")
+  (compilation-shell-minor-mode t)
+  (local-set-key (kbd "<tab>") 'ipython-complete)
+  (setq overlay-arrow-string "")
   )
-(add-hook 'pdb-mode-hook 'better-pdb-breakpoints)
+(add-hook 'pdb-mode-hook 'better-pdb)
+(defvar gud-overlay
+  (let* ((ov (make-overlay (point-min) (point-min))))
+    (overlay-put ov 'face 'secondary-selection)
+    ov)
+  "Overlay variable for GUD highlighting.")
+(defadvice gud-display-line (after my-gud-highlight act)
+  "Highlight current line."
+  (let* ((ov gud-overlay)
+         (bf (gud-find-file true-file)))
+    (save-excursion
+      (set-buffer bf)
+      (move-overlay ov (line-beginning-position) (line-beginning-position 2)
+                    (current-buffer)))))
+(defun gud-kill-buffer ()
+  (if (eq major-mode 'gud-mode)
+      (delete-overlay gud-overlay)))
+(add-hook 'kill-buffer-hook 'gud-kill-buffer)
 ;; (defun ipython-shell-hook ()
 ;;       ;; the following is to synchronize dir-changes
 ;;       (make-local-variable 'shell-dirstack)
@@ -273,7 +293,6 @@ in the current *Python* session."
 ;;       (setq shell-dirtrackp t)
 ;;       (add-hook 'comint-input-filter-functions 'shell-directory-tracker nil t)
 
-;;       (ansi-color-for-comint-mode-on)
 ;;       (define-key python-shell-map [tab] 'ipython-complete)
 ;;       ;; Add this so that tab-completion works both in X11 frames and inside
 ;;       ;; terminals (such as when emacs is called with -nw).
@@ -284,20 +303,40 @@ in the current *Python* session."
 (set-variable 'virtualenv-root-dir "/home/alex/v/")
 (defun workon-postactivate (virtualenv)
   (require 'virtualenv)
-  (virtualenv-activate-environment virtualenv))
+  (virtualenv-activate-environment virtualenv)
+  (rope-open-project (concat virtualenv "/rope")))
 
 (require 'pymacs)
 (pymacs-load "ropemacs" "rope-")
 (setq ropemacs-enable-autoimport t)
 
+(setq python-check-command "pyflakes")
+
+;; auto-complete
 (add-to-list 'load-path "~/.emacs.d/auto-complete-1.3")
 (require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete-1.3/dict")
 (ac-config-default)
+(add-to-list 'ac-modes 'yaml-mode)
+;; This is too slow to be usable, and the delay doesn't work right
+(add-hook 'python-mode-hook 'ac-ropemacs-setup)
 (global-auto-complete-mode 1)
 
-(setq python-check-command "pyflakes")
+;; (defun ryan-python-tab ()
+;;   ;; Try the following:
+;;   ;; 1) Do a yasnippet expansion
+;;   ;; 2) Do a Rope code completion
+;;   ;; 3) Do an indent
+;;   (interactive)
+;;   (if (eql (ac-start) 0)
+;;       (indent-for-tab-command)))
 
+;; (defadvice ac-start (before advice-turn-on-auto-start activate)
+;;   (set (make-local-variable 'ac-auto-start) t))
+;; (defadvice ac-cleanup (after advice-turn-off-auto-start activate)
+;;   (set (make-local-variable 'ac-auto-start) nil))
+
+;; (define-key python-mode-map "\t" 'ryan-python-tab)
 ; ;; Varnish conf support
 ; (autoload 'vcl-mode "vcl-mode" "Edit Varnish VCL files" t)
 ; (add-to-list 'auto-mode-alist '("\\.vcl$" . vcl-mode))
@@ -346,6 +385,5 @@ in the current *Python* session."
 (defun flymake-get-tex-args (file-name)
 (list "pdflatex"
 (list "-file-line-error" "-interaction=nonstopmode" file-name)))
- 
 (add-hook 'LaTeX-mode-hook 'flymake-mode)
 (add-hook 'LaTeX-mode-hook 'flyspell-mode)
