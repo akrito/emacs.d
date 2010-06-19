@@ -33,6 +33,18 @@
 (tool-bar-mode -1)
 (blink-cursor-mode -1)
 
+;; auto-pair parentheses
+(require 'autopair)
+(autopair-global-mode 1)
+(put 'autopair-insert-opening 'delete-selection t)
+(put 'autopair-skip-close-maybe 'delete-selection t)
+(put 'autopair-insert-or-skip-quote 'delete-selection t)
+(put 'autopair-extra-insert-opening 'delete-selection t)
+(put 'autopair-extra-skip-close-maybe 'delete-selection t)
+(put 'autopair-backspace 'delete-selection 'supersede)
+(put 'autopair-newline 'delete-selection t)
+
+
 ;; On X11, change the pointer to an arrow, and remove the menu bar
 (if (boundp 'x-pointer-arrow)
     (progn
