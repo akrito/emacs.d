@@ -7,31 +7,46 @@
 (load custom-file 'noerror)
 
 ;; Manual customizations
+(ansi-color-for-comint-mode-on)
+(blink-cursor-mode -1)
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-auto-revert-mode 1)
+(global-hl-line-mode t)
 (server-start)
+(set-fringe-mode 0)
 (set-scroll-bar-mode nil)
-(setq custom-raised-buttons nil
+(setq auto-save-list-file-prefix nil
+      browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "chromium-browser"
+      custom-raised-buttons nil      
       echo-keystrokes 0.01
       gist-view-gist t
+      ido-work-directory-list-ignore-regexps '("^/s/")
       inhibit-startup-screen t
       kill-read-only-ok t
       make-backup-files nil
       mode-line-inverse-video nil
       mouse-autoselect-window t
       mouse-wheel-progressive-speed nil
+      mouse-wheel-scroll-amount '(2 ((shift) . 1) ((control)))
+      org-agenda-files '("~/wiki/wiki.org_archive")
+      show-trailing-whitespace t
+      speedbar-hide-button-brackets-flag t
+      speedbar-indentation-width 2
+      speedbar-show-unknown-files t
+      speedbar-use-images nil
       starttls-use-gnutls t
+      thing-at-point-file-name-chars "-~/[:alnum:]_.${}#%,"
       truncate-partial-width-windows nil
-      visible-bell t
       vc-follow-symlinks t
-      thing-at-point-file-name-chars "-~/[:alnum:]_.${}#%,")
+      visible-bell t)
 (setq-default fill-column 79
               cursor-type 'bar
-              indent-tabs-mode nil
-              show-trailing-whitespace t)
+              mode-line-format '("%e" (buffer-file-truename "%f" "%b") "-%*--%l--" mode-line-modes "%-")
+              indent-tabs-mode nil)
+              ;; show-trailing-whitespace t)
 (show-paren-mode t)
 (tool-bar-mode -1)
-(blink-cursor-mode -1)
 
 ;; auto-pair parentheses
 (require 'autopair)
@@ -44,7 +59,7 @@
 (put 'autopair-backspace 'delete-selection 'supersede)
 (put 'autopair-newline 'delete-selection t)
 
-
+;; Mouse stuff
 ;; On X11, change the pointer to an arrow, and remove the menu bar
 (if (boundp 'x-pointer-arrow)
     (progn
@@ -53,52 +68,36 @@
       (set-mouse-color "black")
       (menu-bar-mode 1)))
 
-(setq auto-save-list-file-prefix nil)
+;; Some Acme-style chords
+(require 'acme-mouse)
 
-;; github gists
+;; Git
 (autoload 'gist-region "gist" "Gist" t)
 (autoload 'gist-list "gist" "Gist" t)
 (autoload 'gist-region-private "gist" "Gist" t)
 (autoload 'gist-region-or-buffer "gist" "Gist" t)
 (autoload 'gist-region-or-buffer-private "gist" "Gist" t)
-
-;; magit
 (autoload 'magit-status "magit" nil t)
-
-; ;; iedit
-; (autoload 'iedit-mode "iedit" nil t)
-; (define-key global-map (kbd "C-;") 'iedit-mode)
-;
-; ;; chrome support
-; ; (if (locate-library "edit-server")
-; ;    (progn
-; ;      (require 'edit-server)
-; ;      (setq edit-server-new-frame nil)
-; ;      (edit-server-start)))
-;
-; ;; Highlight the current line
-(global-hl-line-mode t)
-(setq show-trailing-whitespace t)
-;; For a dark background
-(set-face-background 'hl-line "#000000")
-;; For a light background
-;;(set-face-background 'hl-line "#eeeeee")
 
 ;; Colors
 (require 'color-theme)
 (color-theme-initialize)
+;; For a dark background
+(set-face-background 'hl-line "#000000")
 (load-file "~/.emacs.d/themes/zen-and-art.el")
 (color-theme-zen-and-art)
-;; (color-theme-late-night)
-;; (color-theme-charcoal-black)
-;; (color-theme-gtk-ide)
-;; (color-theme-dark-laptop)
-;; (color-theme-aalto-light)
+;; For a light background
+;;(set-face-background 'hl-line "#eeeeee")
 
-;; Rebind keys
-(global-set-key (kbd "C-!") 'shell-command)
-(global-set-key (kbd "C-|") 'shell-command-on-region)
 ;; Completion
+;; Auto-complete
+(add-to-list 'load-path "~/.emacs.d/auto-complete-1.3")
+(require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete-1.3/dict")
+(ac-config-default)
+(add-to-list 'ac-modes 'yaml-mode)
+(global-auto-complete-mode 1)
+;; Hippie
 (global-set-key (kbd "C-SPC") (make-hippie-expand-function
                              '(try-complete-file-name-partially
                                try-complete-file-name
@@ -108,6 +107,8 @@
 ;; http://xahlee.org/emacs/ergonomic_emacs_keybinding.html
 (load "ergonomic_keybinding_qwerty")
 ;; I don't like all of them
+(global-set-key (kbd "C-!") 'shell-command)
+(global-set-key (kbd "C-|") 'shell-command-on-region)
 (global-set-key (kbd "C-n") 'make-frame-command)
 (global-set-key (kbd "C-b") 'switch-to-buffer)
 (global-set-key (kbd "M-b") 'bookmark-jump)
@@ -138,9 +139,6 @@
           "M-a "
           (all-completions "" obarray 'commandp))))))))
 
-; ;; add a column of numbers
-; (autoload 'sum-column "sum-column" "Sums a column" t)
-
 ;; better buffer names
 (require 'uniquify)
 (setq uniquify-buffer-name-style   'forward
@@ -153,7 +151,6 @@
 (autoload 'ido-mode "ido")
 (ido-mode t)
 (setq ido-max-directory-size 200000)
-;(setq ido-enable-tramp-completion nil)
 
 ;; one-to-one windows
 (setq pop-up-frames t)
@@ -171,25 +168,6 @@
         ("*magit-diff*" (same-frame t))
         ("*magit-commit*" (same-frame t))))
 
-;; Some Acme-style chords
-(require 'acme-mouse)
-
-; ;; clojure
-; ;;(add-to-list 'load-path "~/opt/clojure-mode")
-; ;;(require 'clojure-mode)
-; ;;(add-to-list 'load-path "~/src/swank-clojure")
-; ;;(setq swank-clojure-jar-path "~/src/clojure/clojure.jar")
-; ;;      swank-clojure-extra-classpaths (list
-; ;;				      "~/src/swank-clojure/src/swank"
-; ;;				      "~/src/clojure-contrib/clojure-contrib.jar"))
-; ;;(require 'swank-clojure-autoload)
-; ;;(eval-after-load "slime"
-; ;;  '(progn (slime-setup '(slime-repl))))
-; ;;(add-to-list 'load-path "~/opt/slime")
-; ;;(require 'slime)
-; ;;(slime-setup)
-; ;;(clojure-slime-config)
-
 ;; Midnight mode
 (midnight-delay-set 'midnight-delay "12:00am")
 (add-to-list 'clean-buffer-list-kill-regexps
@@ -202,11 +180,12 @@
 (yas/initialize)
 (yas/load-directory "~/.emacs.d/snippets")
 (setq yas/indent-line 'none)
+
 ;; File type support
 
-;; Better Python support
-;; This is on by default in Emacs 23.2, I hear
-(ansi-color-for-comint-mode-on) 
+;; Python
+;; Force python.el, not python-mode.el
+(autoload 'python-mode "python" "python" t)
 ;; __IPYTHON__ will return the interpreter in both ipython and ipdb. __IP only
 ;; works for ipython
 (setq ipython-completion-command-string "print(';'.join(__IPYTHON__.Completer.all_completions('%s')))\n")
@@ -258,6 +237,12 @@ in the current *Python* session."
              (delete-region beg end)
              (insert completion)))))
 
+;; Tab-completion in IPython shells
+(add-hook 'comint-mode-hook 
+          '(lambda () 
+             (local-set-key (kbd "<tab>") 'ipython-complete)))
+
+;; Pdb
 (defun better-pdb ()
   (gud-def gud-break  "break %d/%f:%l"  "\C-b" "Set breakpoint at current line.")
   (gud-def gud-remove "clear %d/%f:%l"  "\C-d" "Remove breakpoint at current line")
@@ -266,6 +251,7 @@ in the current *Python* session."
   (setq overlay-arrow-string "")
   )
 (add-hook 'pdb-mode-hook 'better-pdb)
+;; Highlight the current line when debugging
 (defvar gud-overlay
   (let* ((ov (make-overlay (point-min) (point-min))))
     (overlay-put ov 'face 'secondary-selection)
@@ -283,70 +269,25 @@ in the current *Python* session."
   (if (eq major-mode 'gud-mode)
       (delete-overlay gud-overlay)))
 (add-hook 'kill-buffer-hook 'gud-kill-buffer)
-;; (defun ipython-shell-hook ()
-;;       ;; the following is to synchronize dir-changes
-;;       (make-local-variable 'shell-dirstack)
-;;       (setq shell-dirstack nil)
-;;       (make-local-variable 'shell-last-dir)
-;;       (setq shell-last-dir nil)
-;;       (make-local-variable 'shell-dirtrackp)
-;;       (setq shell-dirtrackp t)
-;;       (add-hook 'comint-input-filter-functions 'shell-directory-tracker nil t)
 
-;;       (define-key python-shell-map [tab] 'ipython-complete)
-;;       ;; Add this so that tab-completion works both in X11 frames and inside
-;;       ;; terminals (such as when emacs is called with -nw).
-;;       (define-key python-shell-map "\t" 'ipython-complete)
-
-;; (add-hook 'python-shell-hook 'ipython-shell-hook)
-(require 'virtualenv)
-(set-variable 'virtualenv-root-dir "/home/alex/v/")
+;; Virtualenv
+(autoload 'virtualenv-activate-environment "virtualenv" "virtualenv" t)
+(setq virtualenv-root-dir "/home/alex/v/")
 (defun workon-postactivate (virtualenv)
-  (require 'virtualenv)
   (virtualenv-activate-environment virtualenv)
-  (rope-open-project (concat virtualenv "/rope")))
+  (if (functionp 'rope-open-project) (rope-open-project (concat virtualenv "/rope"))))
 
-(require 'pymacs)
-(pymacs-load "ropemacs" "rope-")
+;; Ropemacs
+(autoload 'pymacs-load "pymacs")
 (setq ropemacs-enable-autoimport t)
+(defun python-hook ()
+  (pymacs-load "ropemacs" "rope-")
+  (ac-ropemacs-setup))
+;  (local-set-key "\M-/" 'rope-code-assist))
+(add-hook 'python-mode-hook 'python-hook)
 
+;; Pyflakes
 (setq python-check-command "pyflakes")
-
-;; auto-complete
-(add-to-list 'load-path "~/.emacs.d/auto-complete-1.3")
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete-1.3/dict")
-(ac-config-default)
-(add-to-list 'ac-modes 'yaml-mode)
-;; This is too slow to be usable, and the delay doesn't work right
-(add-hook 'python-mode-hook 'ac-ropemacs-setup)
-(global-auto-complete-mode 1)
-
-;; (defun ryan-python-tab ()
-;;   ;; Try the following:
-;;   ;; 1) Do a yasnippet expansion
-;;   ;; 2) Do a Rope code completion
-;;   ;; 3) Do an indent
-;;   (interactive)
-;;   (if (eql (ac-start) 0)
-;;       (indent-for-tab-command)))
-
-;; (defadvice ac-start (before advice-turn-on-auto-start activate)
-;;   (set (make-local-variable 'ac-auto-start) t))
-;; (defadvice ac-cleanup (after advice-turn-off-auto-start activate)
-;;   (set (make-local-variable 'ac-auto-start) nil))
-
-;; (define-key python-mode-map "\t" 'ryan-python-tab)
-; ;; Varnish conf support
-; (autoload 'vcl-mode "vcl-mode" "Edit Varnish VCL files" t)
-; (add-to-list 'auto-mode-alist '("\\.vcl$" . vcl-mode))
-;
-; ;; Lua support
-; (autoload 'lua-mode "lua-mode" "Edit Lua scripts" t)
-; (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
-;
-; ;; Apache conf support
-; (autoload 'apache-mode "apache-mode" "Edit Apache confs" t)
 
 ;; Haskell
 (autoload 'haskell-mode "~/.emacs.d/haskell-mode/haskell-site-file" "Haskell mode" t)
@@ -363,16 +304,13 @@ in the current *Python* session."
 (setq org-highlight-sparse-tree-matches nil)
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 
-; ;; restructured text
-; (autoload 'rst-mode "rst" "restructured text" t)
-
 ;; yaml
 (autoload 'yaml-mode "yaml-mode" "YAML Ain't Markup Language" t)
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode))
-(add-hook 'yaml-mode-hook
-          '(lambda ()
-             (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
+(defun yaml-hook ()
+  (define-key yaml-mode-map "\C-m" 'newline-and-indent))
+(add-hook 'yaml-mode-hook 'yaml-hook)
 
 ;; ruby
 (setq ruby-indent-level 4)
@@ -383,7 +321,54 @@ in the current *Python* session."
 
 ;; TeX
 (defun flymake-get-tex-args (file-name)
-(list "pdflatex"
-(list "-file-line-error" "-interaction=nonstopmode" file-name)))
+  (list "pdflatex"
+        (list "-file-line-error" "-interaction=nonstopmode" file-name)))
 (add-hook 'LaTeX-mode-hook 'flymake-mode)
 (add-hook 'LaTeX-mode-hook 'flyspell-mode)
+
+;; Currently disabled for debugging
+
+; ;; iedit
+; (autoload 'iedit-mode "iedit" nil t)
+; (define-key global-map (kbd "C-;") 'iedit-mode)
+;
+; ;; chrome support
+; ; (if (locate-library "edit-server")
+; ;    (progn
+; ;      (require 'edit-server)
+; ;      (setq edit-server-new-frame nil)
+; ;      (edit-server-start)))
+;
+; ;; Varnish conf support
+; (autoload 'vcl-mode "vcl-mode" "Edit Varnish VCL files" t)
+; (add-to-list 'auto-mode-alist '("\\.vcl$" . vcl-mode))
+;
+; ;; Lua support
+; (autoload 'lua-mode "lua-mode" "Edit Lua scripts" t)
+; (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+;
+; ;; Apache conf support
+; (autoload 'apache-mode "apache-mode" "Edit Apache confs" t)
+
+; ;; restructured text
+; (autoload 'rst-mode "rst" "restructured text" t)
+
+; ;; add a column of numbers
+; (autoload 'sum-column "sum-column" "Sums a column" t)
+
+; ;; clojure
+; ;;(add-to-list 'load-path "~/opt/clojure-mode")
+; ;;(require 'clojure-mode)
+; ;;(add-to-list 'load-path "~/src/swank-clojure")
+; ;;(setq swank-clojure-jar-path "~/src/clojure/clojure.jar")
+; ;;      swank-clojure-extra-classpaths (list
+; ;;				      "~/src/swank-clojure/src/swank"
+; ;;				      "~/src/clojure-contrib/clojure-contrib.jar"))
+; ;;(require 'swank-clojure-autoload)
+; ;;(eval-after-load "slime"
+; ;;  '(progn (slime-setup '(slime-repl))))
+; ;;(add-to-list 'load-path "~/opt/slime")
+; ;;(require 'slime)
+; ;;(slime-setup)
+; ;;(clojure-slime-config)
+
