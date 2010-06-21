@@ -173,13 +173,16 @@
 (add-to-list 'clean-buffer-list-kill-regexps
                  "\\*magit.*\\*")
 
-;; yasnippet
+;; yasnippet - will only be used with autocomplete
 (add-to-list 'load-path "~/.emacs.d/yasnippet-0.6.1c")
 (require 'yasnippet)
+;; assign to unused key, since we won't be using it
 (setq yas/trigger-key (kbd "C-c <kp-multiply>"))
 (yas/initialize)
 (yas/load-directory "~/.emacs.d/snippets")
 (setq yas/indent-line 'none)
+;; keep the minor mode off. We'll use autocomplete
+(yas/global-mode -1)
 
 ;; File type support
 
