@@ -7,3 +7,6 @@
 [submodule "zen-and-art"]
 	path = zen-and-art
 	url = http://github.com/irfn/zen-and-art.git
+[submodule "python-den"]
+	path = python-den
+	url = git@github.com:akrito/python-den.git
