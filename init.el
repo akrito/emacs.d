@@ -192,10 +192,11 @@
 ;; File type support
 
 ;; Python support
-(add-to-list 'load-path "~/.emacs.d/python-den")
-(require 'python-den)
-(setq python-den-py-dir "/home/alex/.emacs.d/python-den")
+(setq python-den-root-dir "/home/alex/.emacs.d/python-den")
 (setq virtualenv-root-dir "~/v/") ;; remember the trailing slash
+(add-to-list 'load-path python-den-root-dir)
+(require 'python-den)
+;; Use the default virtualenv
 (workon-postactivate "/home/alex/v/ellington")
 
 ;; Haskell
