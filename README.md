@@ -1,9 +1,29 @@
-Requirements
-============
+Everything here is boring except for maybe
 
-* auto-complete-1.3
+python-den.el
+=============
+
+python-den is a best-of-breed Emacs collection of Python modes and helpers. I
+wrote it because I wanted:
+
+* Pervasive virtualenv support
+* IPython support (with tab-completion) for every interactive shell
+* Debugging without sprinkling *pdb.set_trace() throughout my code
+* Autocomplete with Ropemacs, like the Real IDEs have
+
+Todo
+----
+
+* Clean up all the sloppiness. I don't really know what the hell I'm doing.
+* Stop breaking other comints.
+* Stick the python requirements (ipdb and python_den.py) in a sane
+  place.
+* Gracefully degrade when ropemacs isn't present (I know some people don't want
+  it) - locate-libray?
+* Maybe use auto-complete.el instead of ido for rope completions
+
+Requirements
+------------
+
 * http://github.com/akrito/ipdb
-* magit
-* yasnippet-0.6.1c
-* http://github.com/irfn/zen-and-art
-* http://github.com/philjackson/magit
+* Ropemacs (http://rope.sourceforge.net/ropemacs.html)

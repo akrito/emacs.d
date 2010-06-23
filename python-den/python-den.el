@@ -1,3 +1,6 @@
+;; The Python's den
+;; A best-of-breed Python setup
+
 ;; Require Ropemacs now, so all python procs inherit the rope project
 (require 'pymacs)
 (setq ropemacs-enable-autoimport t)
@@ -75,24 +78,6 @@ in the current *Python* session."
   (setq overlay-arrow-string "")
   )
 (add-hook 'pdb-mode-hook 'better-pdb)
-;; Highlight the current line when debugging
-;; (defvar gud-overlay
-;;   (let* ((ov (make-overlay (point-min) (point-min))))
-;;     (overlay-put ov 'face 'secondary-selection)
-;;     ov)
-;;   "Overlay variable for GUD highlighting.")
-;; (defadvice gud-display-line (after my-gud-highlight act)
-;;   "Highlight current line."
-;;   (let* ((ov gud-overlay)
-;;          (bf (gud-find-file true-file)))
-;;     (save-excursion
-;;       (set-buffer bf)
-;;       (move-overlay ov (line-beginning-position) (line-beginning-position 2)
-;;                     (current-buffer)))))
-;; (defun gud-kill-buffer ()
-;;   (if (eq major-mode 'gud-mode)
-;;       (delete-overlay gud-overlay)))
-;; (add-hook 'kill-buffer-hook 'gud-kill-buffer)
 
 ;; Pyflakes
 (setq python-check-command "pyflakes")
