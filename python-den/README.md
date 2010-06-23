@@ -1,5 +1,3 @@
-Everything here is boring except for maybe
-
 python-den.el
 =============
 
