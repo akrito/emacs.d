@@ -2,6 +2,7 @@
 
 # Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010  Free Software Foundation, Inc.
 # Author: Dave Love <fx@gnu.org>
+# Alex Kritikos <alex@8bitb.us> hacked it to work with IPython
 
 # This file is part of GNU Emacs.
 
@@ -64,19 +65,17 @@ def eexecfile (file):
     # --- code based on code.py and PyShell.py.
     try:
         try:
-            source = open (file, "r").read()
-            code = compile (source, file, "exec")
-        # Other exceptions (shouldn't be any...) will (correctly) fall
-        # through to "final".
+            try:
+                from IPython import ipapi
+                ip = ipapi.get()
+                ip.runlines(open(file).readlines())
+            except:
+                execfile(file, globals(), __main__.__dict__)
         except (OverflowError, SyntaxError, ValueError):
             # FIXME: When can compile() raise anything else than
             # SyntaxError ????
             format_exception (file, False)
             return
-        try:
-            exec code in __main__.__dict__
-        except:
-            format_exception (file, True)
     finally:
         os.remove (file)
 

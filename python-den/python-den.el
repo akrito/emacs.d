@@ -116,10 +116,10 @@ buffer for a list of commands.)"
 	       (path (getenv "PYTHONPATH"))
 	       (process-environment	; to import emacs.py
 		(cons (concat "PYTHONPATH="
-			      (if path (concat path path-separator))
-			      data-directory)
+			      (if path (concat path ":"))
+			      python-den-py-dir)
 		      process-environment))
-	       ;; Suppress use of pager for help output:
+               ;; IPython doesn't work with connection-type nil
 	       (process-connection-type t))
 	  (apply 'make-comint-in-buffer "Python"
 		 (generate-new-buffer "*Python*")
@@ -135,7 +135,7 @@ buffer for a list of commands.)"
       ;; seems worth putting in a separate file, and it's probably cleaner
       ;; to put it in a module.
       ;; Ensure we're at a prompt before doing anything else.
-      (python-send-string "import anaconda as emacs")
+      (python-send-string "import emacs2 as emacs")
       ;; The following line was meant to ensure that we're at a prompt
       ;; before doing anything else.  However, this can cause Emacs to
       ;; hang waiting for a response, if that Python function fails

@@ -191,9 +191,10 @@
 
 ;; File type support
 
-;; Python support - run before autocomplete
+;; Python support
 (add-to-list 'load-path "~/.emacs.d/python-den")
 (require 'python-den)
+(setq python-den-py-dir "/home/alex/.emacs.d/python-den")
 (setq virtualenv-root-dir "~/v/") ;; remember the trailing slash
 (workon-postactivate "/home/alex/v/ellington")
 
