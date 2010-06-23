@@ -13,7 +13,7 @@
   (virtualenv-activate-environment virtualenv)
   (if (functionp 'rope-open-project) (rope-open-project (concat virtualenv "/rope"))))
 
-;; Tab completion from ipython.el
+;; Tab completion from ipython.el (http://ipython.scipy.org/dist/ipython.el)
 ;; __IPYTHON__ will return the interpreter in both ipython and ipdb. __IP only
 ;; works for ipython
 (setq ipython-completion-command-string "print(';'.join(__IPYTHON__.Completer.all_completions('%s')))\n")
