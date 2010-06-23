@@ -1,6 +1,7 @@
 ;;; virtualenv.el --- Virtualenv for Python mode  -*- coding: utf-8 -*-
 
  ;; Copyright (c) 2010 - Jesse Legg <jesse@jesselegg.com>
+ ;; Tiny pdb additions - Alex Kritikos <alex@8bitb.us>
  ;; MIT License
 
  ;; Permission is hereby granted, free of charge, to any person
