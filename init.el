@@ -237,17 +237,6 @@
 
 ;; Currently disabled for debugging
 
-; ;; iedit
-; (autoload 'iedit-mode "iedit" nil t)
-; (define-key global-map (kbd "C-;") 'iedit-mode)
-;
-; ;; chrome support
-; ; (if (locate-library "edit-server")
-; ;    (progn
-; ;      (require 'edit-server)
-; ;      (setq edit-server-new-frame nil)
-; ;      (edit-server-start)))
-;
 ; ;; Varnish conf support
 ; (autoload 'vcl-mode "vcl-mode" "Edit Varnish VCL files" t)
 ; (add-to-list 'auto-mode-alist '("\\.vcl$" . vcl-mode))
@@ -255,15 +244,9 @@
 ; ;; Lua support
 ; (autoload 'lua-mode "lua-mode" "Edit Lua scripts" t)
 ; (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
-;
-; ;; Apache conf support
-; (autoload 'apache-mode "apache-mode" "Edit Apache confs" t)
 
 ; ;; restructured text
 ; (autoload 'rst-mode "rst" "restructured text" t)
-
-; ;; add a column of numbers
-; (autoload 'sum-column "sum-column" "Sums a column" t)
 
 ; ;; clojure
 ; ;;(add-to-list 'load-path "~/opt/clojure-mode")
@@ -280,4 +263,3 @@
 ; ;;(require 'slime)
 ; ;;(slime-setup)
 ; ;;(clojure-slime-config)
-
