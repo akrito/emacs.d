@@ -2,10 +2,12 @@
 ;; A best-of-breed Python setup
 
 ;; Require Ropemacs now, so all python procs inherit the rope project
-(require 'pymacs)
-(setq ropemacs-enable-autoimport t)
-(pymacs-load "ropemacs" "rope-")
-(ac-ropemacs-setup)
+(if (locate-library "pymacs")
+    (progn
+      (require 'pymacs)
+      (setq ropemacs-enable-autoimport t)
+      (pymacs-load "ropemacs" "rope-")
+      (ac-ropemacs-setup)))
 
 ;; Virtualenv
 (require 'virtualenv)

@@ -18,8 +18,6 @@ Todo
 * Stop breaking other comints.
 * Stick the python requirements (ipdb and python_den.py) in a sane
   place.
-* Gracefully degrade when ropemacs isn't present (I know some people don't want
-  it) - locate-libray?
 * Maybe use auto-complete.el instead of ido for rope completions
 
 Requirements
