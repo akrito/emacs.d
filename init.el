@@ -78,6 +78,7 @@
 (autoload 'gist-region-or-buffer "gist" "Gist" t)
 (autoload 'gist-region-or-buffer-private "gist" "Gist" t)
 (autoload 'magit-status "magit" nil t)
+(setq magit-log-cutoff-length 1000)
 
 ;; Colors
 (require 'color-theme)
@@ -93,8 +94,12 @@
 ;; Auto-complete
 (add-to-list 'load-path "~/.emacs.d/auto-complete-1.3")
 (require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete-1.3/dict")
 (ac-config-default)
+(defun ac-ropemacs-setup ()
+  (ac-ropemacs-require)
+  (setq ac-sources (append (list 'ac-source-ropemacs) ac-sources)))
+(ac-ropemacs-initialize)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete-1.3/dict")
 (add-to-list 'ac-modes 'yaml-mode)
 (global-auto-complete-mode 1)
 ;; Hippie
@@ -186,111 +191,11 @@
 
 ;; File type support
 
-;; Python
-;; Force python.el, not python-mode.el
-(autoload 'python-mode "python" "python" t)
-;; __IPYTHON__ will return the interpreter in both ipython and ipdb. __IP only
-;; works for ipython
-(setq ipython-completion-command-string "print(';'.join(__IPYTHON__.Completer.all_completions('%s')))\n")
-(defun ipython-complete ()
-    "Try to complete the python symbol before point. Only knows about the stuff
-in the current *Python* session."
-    (interactive)
-    (let* ((ugly-return nil)
-           (sep ";")
-           (python-process (or (get-buffer-process (current-buffer))
-                                        ;XXX hack for .py buffers
-                               (get-process py-which-bufname)))
-           ;; XXX currently we go backwards to find the beginning of an
-           ;; expression part; a more powerful approach in the future might be
-           ;; to let ipython have the complete line, so that context can be used
-           ;; to do things like filename completion etc.
-           (beg (save-excursion (skip-chars-backward "a-z0-9A-Z_./" (point-at-bol))
-                                (point)))
-           (end (point))
-           (pattern (buffer-substring-no-properties beg end))
-           (completions nil)
-           (completion-table nil)
-           completion
-         (comint-preoutput-filter-functions
-          (append comint-preoutput-filter-functions
-                  '(ansi-color-filter-apply
-                    (lambda (string)
-                      (setq ugly-return (concat ugly-return string))
-                      "")))))
-      (process-send-string python-process
-                            (format ipython-completion-command-string pattern))
-      (accept-process-output python-process)
-      (setq completions
-            (split-string (substring ugly-return 0 (position ?\n ugly-return)) sep))
-      (setq completion-table (loop for str in completions
-                                   collect (list str nil)))
-      (setq completion (try-completion pattern completion-table))
-      (cond ((eq completion t))
-            ((null completion)
-             (message "Can't find completion for \"%s\"" pattern)
-             (ding))
-            ((not (string= pattern completion))
-             (delete-region beg end)
-             (insert completion))
-            (t
-             (setq completion
-                   (ido-completing-read pattern 
-                                        (all-completions pattern completion-table)))
-             (delete-region beg end)
-             (insert completion)))))
-
-;; Tab-completion in IPython shells
-(add-hook 'comint-mode-hook 
-          '(lambda () 
-             (local-set-key (kbd "<tab>") 'ipython-complete)))
-
-;; Pdb
-(defun better-pdb ()
-  (gud-def gud-break  "break %d/%f:%l"  "\C-b" "Set breakpoint at current line.")
-  (gud-def gud-remove "clear %d/%f:%l"  "\C-d" "Remove breakpoint at current line")
-  (compilation-shell-minor-mode t)
-  (local-set-key (kbd "<tab>") 'ipython-complete)
-  (setq overlay-arrow-string "")
-  )
-(add-hook 'pdb-mode-hook 'better-pdb)
-;; Highlight the current line when debugging
-(defvar gud-overlay
-  (let* ((ov (make-overlay (point-min) (point-min))))
-    (overlay-put ov 'face 'secondary-selection)
-    ov)
-  "Overlay variable for GUD highlighting.")
-(defadvice gud-display-line (after my-gud-highlight act)
-  "Highlight current line."
-  (let* ((ov gud-overlay)
-         (bf (gud-find-file true-file)))
-    (save-excursion
-      (set-buffer bf)
-      (move-overlay ov (line-beginning-position) (line-beginning-position 2)
-                    (current-buffer)))))
-(defun gud-kill-buffer ()
-  (if (eq major-mode 'gud-mode)
-      (delete-overlay gud-overlay)))
-(add-hook 'kill-buffer-hook 'gud-kill-buffer)
-
-;; Virtualenv
-(autoload 'virtualenv-activate-environment "virtualenv" "virtualenv" t)
-(setq virtualenv-root-dir "/home/alex/v/")
-(defun workon-postactivate (virtualenv)
-  (virtualenv-activate-environment virtualenv)
-  (if (functionp 'rope-open-project) (rope-open-project (concat virtualenv "/rope"))))
-
-;; Ropemacs
-(autoload 'pymacs-load "pymacs")
-(setq ropemacs-enable-autoimport t)
-(defun python-hook ()
-  (pymacs-load "ropemacs" "rope-")
-  (ac-ropemacs-setup))
-;  (local-set-key "\M-/" 'rope-code-assist))
-(add-hook 'python-mode-hook 'python-hook)
-
-;; Pyflakes
-(setq python-check-command "pyflakes")
+;; Python support - run before autocomplete
+(add-to-list 'load-path "~/.emacs.d/python-den")
+(require 'python-den)
+(setq virtualenv-root-dir "~/v/") ;; remember the trailing slash
+(workon-postactivate "/home/alex/v/ellington")
 
 ;; Haskell
 (autoload 'haskell-mode "~/.emacs.d/haskell-mode/haskell-site-file" "Haskell mode" t)
