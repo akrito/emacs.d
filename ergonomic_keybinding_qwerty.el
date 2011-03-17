@@ -411,7 +411,7 @@
 (add-hook 'isearch-mode-hook
  (lambda ()
  (define-key isearch-mode-map (kbd "M-;") 'isearch-repeat-forward)
- (define-key isearch-mode-map (kbd "C-f") 'isearch-repeat-forward)
+ (define-key isearch-mode-map (kbd "M-f") 'isearch-repeat-forward)
  (define-key isearch-mode-map (kbd "M-:") 'isearch-repeat-backward)
 
  (define-key isearch-mode-map (kbd "M-p") 'recenter) ; was isearch-ring-retreat
@@ -422,7 +422,7 @@
  (define-key isearch-mode-map (kbd "M-y") 'nil) ; was isearch-yank-kill
 
  (define-key isearch-mode-map (kbd "M-c") 'kill-ring-save) ; was isearch-toggle-case-fold
- (define-key isearch-mode-map (kbd "M-r") 'kill-word) ; was isearch-toggle-regexp
+ (define-key isearch-mode-map (kbd "M-r") 'isearch-toggle-regexp)
  (define-key isearch-mode-map (kbd "M-e") 'backward-kill-word) ; was isearch-edit-string
  )
 )
@@ -558,7 +558,7 @@
 ; M-n message-display-abbrev
  (lambda ()
  (define-key message-mode-map (kbd "M-;") 'isearch-repeat-forward)
- (define-key message-mode-map (kbd "C-f") 'isearch-repeat-forward)
+ (define-key message-mode-map (kbd "M-f") 'isearch-repeat-forward)
  ))
 
 ;; nothing to fix: c-mode, c++-mode, java, sh, js, perl, php, python

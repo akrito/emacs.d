@@ -161,6 +161,7 @@
 (global-set-key (kbd "C-e") 'end-of-line)
 (global-set-key (kbd "C-k") 'kill-line)
 (global-set-key (kbd "M-b") 'bookmark-jump)
+(global-set-key (kbd "M-f") 'isearch-forward)
 (global-set-key (kbd "M-h") 'backward-char)
 (global-set-key (kbd "M-l") 'forward-char)
 (global-set-key (kbd "M-k") 'previous-line)
