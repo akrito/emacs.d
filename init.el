@@ -1,7 +1,7 @@
 ;; TODO
 ;; make a wrapper for "correct-ipdb correct-django-admin.py"
 ;; Fix relative imports in python-shell
-;; in multi-term, send ESC, send ^C
+;; in multi-term, send ^C
 
 ;; Lisp setup
 (require 'cl)
