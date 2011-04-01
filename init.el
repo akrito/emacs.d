@@ -82,7 +82,6 @@
 ;; For a light background
 (set-face-background 'hl-line "#eeeeee")
 (color-theme-emacs-nw)
-;; (autoload 'global-pretty-mode "pretty-mode" "Pretty mode" t)
 
 ;; Utilties
 
@@ -226,9 +225,6 @@
 ;; Scala
 (add-to-list 'load-path "/usr/local//Cellar/scala/2.8.1/libexec/misc/scala-tool-support/emacs")
 (load "scala-mode-auto.el")
-;; SBT
-;; (add-to-list 'load-path "~/.emacs.d/scallap/tools/emacs")
-;; (load "sbt.el")
 ;; Ensime
 (add-to-list 'load-path "~/.emacs.d/ensime/elisp/")
 (require 'ensime)
