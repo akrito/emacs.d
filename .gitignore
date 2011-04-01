@@ -17,3 +17,4 @@ magit
 magit.el
 *.pyc
 abbrev_defs
+ensime/
