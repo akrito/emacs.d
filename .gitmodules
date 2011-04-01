@@ -13,3 +13,6 @@
 [submodule "python.el"]
 	path = python.el
 	url = git://github.com/fgallina/python.el.git
+[submodule "auto-complete"]
+	path = auto-complete
+	url = git://github.com/m2ym/auto-complete.git
