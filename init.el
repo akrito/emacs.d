@@ -1,6 +1,5 @@
 ;; TODO
 ;; make a wrapper for "correct-ipdb correct-django-admin.py"
-;; Fix relative imports in python-shell
 ;; in multi-term, send ^C
 
 ;; Lisp setup
@@ -59,6 +58,34 @@
 (show-paren-mode t)
 (tool-bar-mode -1)
 
+;; GUI stuff
+
+;; On X11, change the pointer to an arrow, and remove the menu bar
+(if (boundp 'x-pointer-arrow)
+    (progn
+      (setq-default x-pointer-shape x-pointer-arrow)
+      ;; hack to force the pointer shape to change
+      (set-mouse-color "black")
+      (menu-bar-mode 0)))
+;; Mac-specific, but shouldn't hurt Linux
+(setq mac-command-modifier (quote meta))
+(setq mac-option-modifier (quote alt))
+;; Some Acme-style chords
+(require 'acme-mouse)
+;; Colors and pretty things
+(require 'color-theme)
+(color-theme-initialize)
+;; For a dark background
+;; (set-face-background 'hl-line "#000000")
+;; (load-file "~/.emacs.d/themes/zen-and-art.el")
+;; (color-theme-zen-and-art)
+;; For a light background
+(set-face-background 'hl-line "#eeeeee")
+(color-theme-emacs-nw)
+;; (autoload 'global-pretty-mode "pretty-mode" "Pretty mode" t)
+
+;; Utilties
+
 ;; auto-pair parentheses
 (require 'autopair)
 (autopair-global-mode 1)
@@ -73,13 +100,15 @@
 ;; Better terminal
 (require 'multi-term)
 (setq multi-term-program "/Users/alex/bin/bash_login")
+(setq term-unbind-key-list '("ESC" "C-f" "C-o" "C-t" "C-b" "C-z" "C-x" "C-c" "C-h" "C-y" "<ESC>"))
 (add-to-list 'term-unbind-key-list "C-b")
 (add-to-list 'term-unbind-key-list "C-t")
 (add-to-list 'term-unbind-key-list "C-o")
 (add-to-list 'term-unbind-key-list "C-f")
 (add-to-list 'term-unbind-key-list "ESC")
 (add-to-list 'term-bind-key-alist '("M-v" . term-paste))
-(add-to-list 'term-bind-key-alist '("M-ESC" . term-send-raw-meta)) 
+(add-to-list 'term-bind-key-alist '("M-ESC" . term-send-raw-meta))
+(add-to-list 'term-bind-key-alist '("C-c" . term-send-raw))
 (setq
  ;; term-default-bg-color "#191717"
  ;; term-default-fg-color "#D2DEC4"
@@ -88,23 +117,6 @@
  multi-term-dedicated-select-after-open-p t
  ;; For some reason, Ubuntu has terminfo entries for Eterm* but not eterm*
  term-term-name "Eterm-color")
-
-;; GUI stuff
-
-;; On X11, change the pointer to an arrow, and remove the menu bar
-(if (boundp 'x-pointer-arrow)
-    (progn
-      (setq-default x-pointer-shape x-pointer-arrow)
-      ;; hack to force the pointer shape to change
-      (set-mouse-color "black")
-      (menu-bar-mode 0)))
-
-;; Mac-specific, but shouldn't hurt Linux
-(setq mac-command-modifier (quote meta))
-(setq mac-option-modifier (quote alt))
-
-;; Some Acme-style chords
-(require 'acme-mouse)
 
 ;; Git
 (autoload 'gist-region "gist" "Gist" t)
@@ -115,20 +127,8 @@
 (autoload 'magit-status "magit" nil t)
 (setq magit-log-cutoff-length 1000)
 
-;; Colors and pretty things
-(require 'color-theme)
-(color-theme-initialize)
-;; For a dark background
-;; (set-face-background 'hl-line "#000000")
-;; (load-file "~/.emacs.d/themes/zen-and-art.el")
-;; (color-theme-zen-and-art)
-;; For a light background
-(set-face-background 'hl-line "#eeeeee")
-(color-theme-emacs-nw)
-;; (autoload 'global-pretty-mode "pretty-mode" "Pretty mode" t)
-
 ;; Auto-complete
-(add-to-list 'load-path "~/.emacs.d/auto-complete-1.3")
+(add-to-list 'load-path "~/.emacs.d/auto-complete")
 (require 'auto-complete-config)
 (ac-config-default)
 (ac-set-trigger-key "TAB")
@@ -153,10 +153,6 @@
 (autoload 'ido-mode "ido")
 (ido-mode t)
 (setq ido-max-directory-size 200000)
-;; Display ido results vertically, rather than horizontally
-(setq ido-decorations (quote ("\n-> " "" "\n   " "\n   ..." "[" "]" " [No match]" " [Matched]" " [Not readable]" " [Too big]" " [Confirm]")))
-(defun ido-disable-line-trucation () (set (make-local-variable 'truncate-lines) nil))
-(add-hook 'ido-minibuffer-setup-hook 'ido-disable-line-trucation)
 
 ;; Midnight mode
 (midnight-delay-set 'midnight-delay "12:00am")
@@ -178,15 +174,31 @@
 
 ;; Python support
 (setenv "DJANGO_SETTINGS_MODULE" "edev")
-(setq python-den-root-dir "~/.emacs.d/python-den")
-(setq virtualenv-root-dir "~/v/") ;; remember the trailing slash
-(add-to-list 'load-path python-den-root-dir)
-(require 'python-den)
-;; Use the default virtualenv
-(workon-postactivate "~/v/ellington")
-(add-hook 'python-mode-hook 'imenu-add-menubar-index)
-;; (setq python-mode-hook nil)
-
+;; Ropemacs
+(require 'pymacs)
+(setq ropemacs-enable-autoimport t)
+(pymacs-load "ropemacs" "rope-")
+(ac-ropemacs-setup)
+(rope-open-project "/Users/alex/v/ellington/rope")
+;; https://github.com/fgallina/python.el
+(add-to-list 'load-path "/Users/alex/.emacs.d/python.el/")
+(require 'python)
+(setq python-shell-exec-path (list "/Users/alex/v/ellington/bin/")
+      python-shell-interpreter "ipython"
+      python-shell-interpreter-args ""
+      python-shell-process-environment (list
+                                        (format "PATH=%s" (mapconcat
+                                                           'identity
+                                                           (reverse
+                                                            (cons (getenv "PATH")
+                                                                  '("/Users/alex/v/ellington/bin/")))
+                                                           ":"))
+                                        "VIRTUAL_ENV=/Users/alex/v/ellington/")
+      python-shell-prompt-regexp "In \\[[0-9]+\\]: "
+      python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
+      python-shell-completion-setup-code ""
+      python-shell-completion-string-code "';'.join(__IP.complete('''%s'''))\n")
+     
 ;; Haskell
 (autoload 'haskell-mode "~/.emacs.d/haskell-mode/haskell-site-file" "Haskell mode" t)
 (add-to-list 'auto-mode-alist '("\\.hs$" . haskell-mode))
@@ -228,13 +240,22 @@
 )
 (add-hook 'LaTeX-mode-hook 'tex-hook)
 
-;; Varnish conf support
-(autoload 'vcl-mode "vcl-mode" "Edit Varnish VCL files" t)
-(add-to-list 'auto-mode-alist '("\\.vcl$" . vcl-mode))
-
 ;; Lua support
 (autoload 'lua-mode "lua-mode" "Edit Lua scripts" t)
 (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+
+;; Scala
+(add-to-list 'load-path "/usr/local//Cellar/scala/2.8.1/libexec/misc/scala-tool-support/emacs")
+(load "scala-mode-auto.el")
+;; SBT
+;; (add-to-list 'load-path "~/.emacs.d/scallap/tools/emacs")
+;; (load "sbt.el")
+;; Ensime
+(add-to-list 'load-path "~/.emacs.d/ensime/elisp/")
+(require 'ensime)
+(add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+;; MINI HOWTO: 
+;; Open .scala file. M-x ensime (once per project)
 
 ;; ;; clojure-mode
 ;; (add-to-list 'load-path "~/opt/clojure-mode")
