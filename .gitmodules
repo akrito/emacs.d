@@ -10,3 +10,6 @@
 [submodule "python-den"]
 	path = python-den
 	url = git@github.com:akrito/python-den.git
+[submodule "python.el"]
+	path = python.el
+	url = git://github.com/fgallina/python.el.git
