@@ -1,10 +1,5 @@
-;; TODO
-;; make a wrapper for "correct-ipdb correct-django-admin.py"
-;; in multi-term, send ^C
-
-;; Lisp setup
-(require 'cl)
 (add-to-list 'load-path "~/.emacs.d")
+(add-to-list 'load-path "~/.emacs.d/vendor")
 
 ;; Keep customizations in a separate file
 (setq custom-file "~/.emacs.d/emacs-custom.el")
@@ -12,19 +7,19 @@
 
 (load "keybindings")
 
-;; Manual customizations
+;; Common settings
 (ansi-color-for-comint-mode-on)
 (blink-cursor-mode -1)
+(delete-selection-mode t)
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-auto-revert-mode 1)
-(global-hl-line-mode 1)
 (server-start)
 (set-fringe-mode 1)
 (scroll-bar-mode -1)
 (setq auto-save-list-file-prefix nil
       bookmark-save-flag 1
       browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "chromium-browser"
+      browse-url-generic-program "open"
       custom-raised-buttons nil
       focus-follows-mouse t
       frame-title-format '((buffer-file-truename "%f" "%b"))
@@ -34,8 +29,9 @@
       inhibit-startup-screen t
       kill-read-only-ok t
       make-backup-files nil
-      mode-line-inverse-video nil
+      mode-line-inverse-video t
       mouse-autoselect-window t
+      mouse-drag-copy-region nil
       mouse-wheel-progressive-speed nil
       mouse-wheel-scroll-amount '(2 ((shift) . 1) ((control)))
       org-agenda-files '("~/wiki/wiki.org_archive")
@@ -58,32 +54,26 @@
 (show-paren-mode t)
 (tool-bar-mode -1)
 
-;; GUI stuff
-
-;; On X11, change the pointer to an arrow, and remove the menu bar
-(if (boundp 'x-pointer-arrow)
-    (progn
-      (setq-default x-pointer-shape x-pointer-arrow)
-      ;; hack to force the pointer shape to change
-      (set-mouse-color "black")
-      (menu-bar-mode 0)))
-;; Mac-specific, but shouldn't hurt Linux
-(setq mac-command-modifier (quote meta))
-(setq mac-option-modifier (quote alt))
 ;; Some Acme-style chords
-(require 'acme-mouse)
+;; (add-to-list 'load-path "~/.emacs.d/vendor/acme-mouse/")
+;; (require 'acme-mouse)
+
 ;; Colors and pretty things
+(add-to-list 'load-path "~/.emacs.d/vendor/color-theme/")
 (require 'color-theme)
 (color-theme-initialize)
-;; For a dark background
-;; (set-face-background 'hl-line "#000000")
-;; (load-file "~/.emacs.d/themes/zen-and-art.el")
-;; (color-theme-zen-and-art)
-;; For a light background
-(set-face-background 'hl-line "#eeeeee")
+(load-file "~/.emacs.d/vendor/solarized/emacs-color-theme-solarized/color-theme-solarized.el")
 (color-theme-emacs-nw)
 
-;; Utilties
+;; dark theme
+(color-theme-solarized-dark)
+(add-to-list 'initial-frame-alist '(cursor-color . "#748284"))
+(add-to-list 'default-frame-alist '(cursor-color . "#748284"))
+
+;; light theme
+;; (color-theme-solarized-light)
+;; (add-to-list 'initial-frame-alist '(cursor-color . "#748284"))
+;; (add-to-list 'default-frame-alist '(cursor-color . "#748284"))
 
 ;; auto-pair parentheses
 (require 'autopair)
@@ -96,7 +86,10 @@
 (add-hook 'comint-mode-hook 'comint-hook)
 (add-hook 'term-mode-hook 'comint-hook)
 
+(setq 'multi-term-program "/Users/alex/bin/bash_login")
+
 ;; Git
+(add-to-list 'load-path "~/.emacs.d/vendor/magit")
 (autoload 'gist-region "gist" "Gist" t)
 (autoload 'gist-list "gist" "Gist" t)
 (autoload 'gist-region-private "gist" "Gist" t)
@@ -106,7 +99,7 @@
 (setq magit-log-cutoff-length 1000)
 
 ;; Auto-complete
-(add-to-list 'load-path "~/.emacs.d/auto-complete")
+(add-to-list 'load-path "~/.emacs.d/vendor/auto-complete")
 (require 'auto-complete-config)
 (ac-config-default)
 (ac-set-trigger-key "TAB")
@@ -138,7 +131,7 @@
                  "\\*magit.*\\*")
 
 ;; yasnippet - will only be used with autocomplete
-(add-to-list 'load-path "~/.emacs.d/yasnippet-0.6.1c")
+(add-to-list 'load-path "~/.emacs.d/vendor/yasnippet-0.6.1c")
 (require 'yasnippet)
 ;; assign to unused key, since we won't be using it
 (setq yas/trigger-key (kbd "C-c <kp-multiply>"))
@@ -147,6 +140,11 @@
 (setq yas/indent-line 'none)
 ;; keep the minor mode off. We'll use autocomplete
 (yas/global-mode -1)
+
+;; textmate features
+(add-to-list 'load-path "~/.emacs.d/vendor/textmate.el/")
+(require 'textmate)
+(textmate-mode)
 
 ;; File type support
 
@@ -185,12 +183,15 @@
 (add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
 
 ;; org mode
-(setq org-agenda-files (list "~/work.org" "~/work.org_archive")
+(setq org-agenda-files (list "~/org")
       org-hide-leading-stars t
       org-log-done t
       org-agenda-skip-archived-trees nil
       org-highlight-sparse-tree-matches nil)
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+(setq org-mobile-directory "~/org/mobile")
+(setq org-directory "~/org")
+(setq org-mobile-inbox-for-pull "~/org/inbox.org")
 
 ;; yaml
 (autoload 'yaml-mode "yaml-mode" "YAML Ain't Markup Language" t)
@@ -226,20 +227,13 @@
 (add-to-list 'load-path "/usr/local//Cellar/scala/2.8.1/libexec/misc/scala-tool-support/emacs")
 (load "scala-mode-auto.el")
 ;; Ensime
-(add-to-list 'load-path "~/.emacs.d/ensime/elisp/")
+(add-to-list 'load-path "~/.emacs.d/vendor/ensime/elisp/")
 (require 'ensime)
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
 ;; MINI HOWTO: 
 ;; Open .scala file. M-x ensime (once per project)
 
-;; ;; clojure-mode
-;; (add-to-list 'load-path "~/opt/clojure-mode")
-;; (require 'clojure-mode)
-
-;; ;; slime
-;; (eval-after-load "slime" 
-;;   '(progn (slime-setup '(slime-repl))))
-
-;; (add-to-list 'load-path "~/opt/slime")
-;; (require 'slime)
-;; (slime-setup)
+;; Platform-specific overrides
+(if (eq system-type 'darwin)
+  (load "osx.el")
+  (load "linux.el"))
