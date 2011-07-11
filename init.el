@@ -86,7 +86,26 @@
 (add-hook 'comint-mode-hook 'comint-hook)
 (add-hook 'term-mode-hook 'comint-hook)
 
-(setq 'multi-term-program "/Users/alex/bin/bash_login")
+;; Better terminal
+(require 'multi-term)
+(setq multi-term-program "/Users/alex/bin/bash_login")
+(setq term-unbind-key-list '("ESC" "C-f" "C-o" "C-t" "C-b" "C-z" "C-x" "C-c" "C-h" "C-y" "<ESC>"))
+(add-to-list 'term-unbind-key-list "C-b")
+(add-to-list 'term-unbind-key-list "C-t")
+(add-to-list 'term-unbind-key-list "C-o")
+(add-to-list 'term-unbind-key-list "C-f")
+(add-to-list 'term-unbind-key-list "ESC")
+(add-to-list 'term-bind-key-alist '("M-v" . term-paste))
+(add-to-list 'term-bind-key-alist '("M-ESC" . term-send-raw-meta))
+(add-to-list 'term-bind-key-alist '("C-c" . term-send-raw))
+(setq
+ ;; term-default-bg-color "#191717"
+ ;; term-default-fg-color "#D2DEC4"
+ term-default-bg-color "#ffffff"
+ term-default-fg-color "#000000"
+ multi-term-dedicated-select-after-open-p t
+ ;; For some reason, Ubuntu has terminfo entries for Eterm* but not eterm*
+ term-term-name "Eterm-color")
 
 ;; Git
 (add-to-list 'load-path "~/.emacs.d/vendor/magit")
