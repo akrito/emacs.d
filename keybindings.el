@@ -1,12 +1,10 @@
-;; Unset annoying bindings
-(global-unset-key (kbd "C-p")) ; Print
-
 ;; Bindings
 (global-set-key (kbd "C-|") 'shell-command-on-region)
 (global-set-key (kbd "M-'") 'comment-dwim)
 (global-set-key (kbd "M-RET") 'ns-toggle-fullscreen)
 (global-set-key (kbd "M-0") 'delete-window)
 (global-set-key (kbd "M-1") 'delete-other-windows)
+(global-set-key (kbd "M-2") 'balance-windows)
 (global-set-key (kbd "C-b") 'switch-to-buffer)
 (global-set-key (kbd "M-c") 'kill-ring-save)
 (global-set-key (kbd "M-D") 'split-window-vertically)
@@ -14,13 +12,15 @@
 (global-set-key (kbd "C-d") 'delete-char)
 (global-set-key (kbd "M-f") 'isearch-forward)
 (global-set-key (kbd "M-F") 'rgrep)
-(global-set-key (kbd "M-i") 'ido-goto-symbol)
+(global-set-key (kbd "M-i") 'textmate-goto-symbol)
 (global-set-key (kbd "M-l") 'goto-line)
 (global-set-key (kbd "M-m") 'magit-status)
+(global-set-key (kbd "C-p") 'previous-line)
 (global-set-key (kbd "M-q") 'save-buffers-kill-terminal)
 (global-set-key (kbd "M-r") 'revert-buffer)
 (global-set-key (kbd "C-s") 'other-frame)
-(global-set-key (kbd "C-t") 'multi-term-dedicated-toggle)
+(global-set-key (kbd "C-t") 'multi-term-next)
+(global-set-key (kbd "C-M-t") 'multi-term)
 (global-set-key (kbd "M-t") 'textmate-goto-file)
 (global-set-key (kbd "M-T") 'textmate-goto-symbol)
 (global-set-key (kbd "M-v") 'yank)

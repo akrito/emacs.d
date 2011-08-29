@@ -9,9 +9,12 @@
 (delete-selection-mode t)
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-auto-revert-mode 1)
+(global-hl-line-mode 1)
 (server-start)
 (set-fringe-mode 1)
 (scroll-bar-mode -1)
+(tool-bar-mode -1)
+(winner-mode 1)
 (setq auto-save-list-file-prefix nil
       bookmark-save-flag 1
       browse-url-browser-function 'browse-url-generic
@@ -31,6 +34,8 @@
       mouse-wheel-progressive-speed nil
       mouse-wheel-scroll-amount '(2 ((shift) . 1) ((control)))
       org-agenda-files '("~/wiki/wiki.org_archive")
+ '(org-agenda-files (quote ("/Users/alex/org/life.org" "/Users/alex/org/log.org" "/Users/alex/org/mobileorg.org" "/Users/alex/org/readability.org" "/Users/alex/org/work.org")) t)
+
       ring-bell-function 'ignore
       show-trailing-whitespace t
       speedbar-hide-button-brackets-flag t
@@ -42,24 +47,59 @@
       truncate-partial-width-windows nil
       vc-follow-symlinks t
       visible-bell nil)
-(setq-default fill-column 79
-              cursor-type 'bar
-              ispell-program-name "aspell"
-              mode-line-format '("%e" (buffer-file-truename "%f" "%b") "-%*--%l--" mode-line-modes "%-")
-              indent-tabs-mode nil)
-(show-paren-mode t)
-(tool-bar-mode -1)
+(setq-default
+ fill-column 79
+ cursor-type 'bar
+ ispell-program-name "aspell"
+ indent-tabs-mode nil
+ mode-line-format
+ (list
+  ;; the buffer name; the file name as a tool tip
+  '(:eval (if buffer-file-truename
+              (propertize "%f" 'face 'font-lock-keyword-face
+                          'help-echo (buffer-file-name))
+            (propertize "%b" 'face 'font-lock-keyword-face
+                        'help-echo (buffer-file-name))))
 
-;; Some Acme-style chords
-;; (add-to-list 'load-path "~/.emacs.d/vendor/acme-mouse/")
-;; (require 'acme-mouse)
+  ;; line and column
+  '(:eval (when buffer-file-truename
+            (concat
+             " (" ;; '%02' to set to 2 chars at least; prevents flickering
+             (propertize "%02l" 'face 'font-lock-type-face) ","
+             (propertize "%02c" 'face 'font-lock-type-face) 
+             ")")))
+
+  ;; the current major mode for the buffer.
+  " ["
+  '(:eval (propertize "%m" 'face 'font-lock-string-face
+                      'help-echo buffer-file-coding-system))
+  "]"
+
+  ;; insert vs overwrite mode, input-method in a tooltip
+  '(:eval (when overwrite-mode (propertize " Ovr"
+                      'face 'font-lock-preprocessor-face
+                      'help-echo (concat "Buffer is in "
+                                         (if overwrite-mode "overwrite" "insert") " mode"))))
+
+  ;; was this buffer modified since the last save?
+  '(:eval (when (and buffer-file-truename (buffer-modified-p))
+            (propertize " Mod"
+                                     'face 'font-lock-warning-face
+                                     'help-echo "Buffer has been modified")))
+
+  ;; is this buffer read-only?
+  '(:eval (when buffer-read-only
+            (propertize " RO"
+                                     'face 'font-lock-type-face
+                                     'help-echo "Buffer is read-only")))
+  ))
 
 ;; Colors and pretty things
 (add-to-list 'load-path "~/.emacs.d/vendor/color-theme/")
 (require 'color-theme)
 (color-theme-initialize)
+
 (load-file "~/.emacs.d/vendor/solarized/emacs-color-theme-solarized/color-theme-solarized.el")
-(color-theme-emacs-nw)
 
 ;; dark theme
 (color-theme-solarized-dark)
@@ -71,7 +111,8 @@
 ;; (add-to-list 'initial-frame-alist '(cursor-color . "#748284"))
 ;; (add-to-list 'default-frame-alist '(cursor-color . "#748284"))
 
-;; auto-pair parentheses
+;; parentheses
+(show-paren-mode t)
 (require 'autopair)
 (autopair-global-mode 1)
 (setq autopair-autowrap t)
@@ -84,24 +125,15 @@
 
 ;; Better terminal
 (require 'multi-term)
-(setq multi-term-program "/Users/alex/bin/bash_login")
-(setq term-unbind-key-list '("ESC" "C-f" "C-o" "C-t" "C-b" "C-z" "C-x" "C-c" "C-h" "C-y" "<ESC>"))
-(add-to-list 'term-unbind-key-list "C-b")
-(add-to-list 'term-unbind-key-list "C-t")
-(add-to-list 'term-unbind-key-list "C-o")
-(add-to-list 'term-unbind-key-list "C-f")
-(add-to-list 'term-unbind-key-list "ESC")
-(add-to-list 'term-bind-key-alist '("M-v" . term-paste))
-(add-to-list 'term-bind-key-alist '("M-ESC" . term-send-raw-meta))
-(add-to-list 'term-bind-key-alist '("C-c" . term-send-raw))
 (setq
- ;; term-default-bg-color "#191717"
- ;; term-default-fg-color "#D2DEC4"
- term-default-bg-color "#ffffff"
- term-default-fg-color "#000000"
- multi-term-dedicated-select-after-open-p t
+ multi-term-program "/Users/alex/bin/bash_login"
+ term-bind-key-alist '(("C-c C-c" . term-send-raw) ("M-ESC" . term-send-raw-meta) ("M-v" . term-paste) ("C-p" . previous-line) ("C-n" . next-line) ("C-s" . isearch-forward) ("C-r" . isearch-backward) ("C-m" . term-send-raw) ("M-f" . term-send-forward-word) ("M-b" . term-send-backward-word) ("M-o" . term-send-backspace) ("M-p" . term-send-up) ("M-n" . term-send-down) ("M-M" . term-send-forward-kill-word) ("M-N" . term-send-backward-kill-word) ("M-r" . term-send-reverse-search-history) ("M-," . term-send-input) ("<M-backspace>" . term-send-raw-meta) ("M-." . comint-dynamic-complete))
+ term-default-bg-color "#002028"
+ term-default-fg-color "#748284"
  ;; For some reason, Ubuntu has terminfo entries for Eterm* but not eterm*
- term-term-name "Eterm-color")
+ term-term-name "Eterm-color"
+ term-unbind-key-list '("C-c C-c" "ESC" "C-f" "C-o" "C-t" "C-b" "C-z" "C-x" "C-h" "C-y" "<ESC>")
+)
 
 ;; Git
 (add-to-list 'load-path "~/.emacs.d/vendor/magit")
@@ -119,13 +151,21 @@
 (ac-config-default)
 (ac-set-trigger-key "TAB")
 (setq ac-auto-start nil)
-(defun ac-ropemacs-setup ()
-  (ac-ropemacs-require)
-  (setq ac-sources (append (list 'ac-source-ropemacs) ac-sources)))
-(ac-ropemacs-initialize)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete-1.3/dict")
 (add-to-list 'ac-modes 'yaml-mode)
+(setq-default ac-sources '(ac-source-yasnippet ac-source-imenu ac-source-filename ac-source-words-in-same-mode-buffers))
 (global-auto-complete-mode 1)
+;; yasnippet - will only be used with autocomplete
+(add-to-list 'load-path "~/.emacs.d/vendor/yasnippet-0.6.1c")
+(require 'yasnippet)
+;; assign to unused key, since we won't be using it
+(setq yas/trigger-key (kbd "C-c <kp-multiply>"))
+(yas/initialize)
+;; http://yasnippet.googlecode.com/svn/trunk/doc/snippet-organization.html
+(yas/load-directory "~/.emacs.d/snippets")
+(setq yas/indent-line 'none)
+;; keep the minor mode off. We'll use autocomplete
+(yas/global-mode -1)
 
 ;; better buffer names
 (require 'uniquify)
@@ -145,35 +185,24 @@
 (add-to-list 'clean-buffer-list-kill-regexps
                  "\\*magit.*\\*")
 
-;; yasnippet - will only be used with autocomplete
-(add-to-list 'load-path "~/.emacs.d/vendor/yasnippet-0.6.1c")
-(require 'yasnippet)
-;; assign to unused key, since we won't be using it
-(setq yas/trigger-key (kbd "C-c <kp-multiply>"))
-(yas/initialize)
-(yas/load-directory "~/.emacs.d/snippets")
-(setq yas/indent-line 'none)
-;; keep the minor mode off. We'll use autocomplete
-(yas/global-mode -1)
-
 ;; textmate features
 (add-to-list 'load-path "~/.emacs.d/vendor/textmate.el/")
 (require 'textmate)
-(textmate-mode)
 
 ;; File type support
 
 ;; Python support
+;; https://github.com/fgallina/python.el
+(add-to-list 'load-path "~/.emacs.d/vendor/python.el/")
+(require 'python)
 (setenv "DJANGO_SETTINGS_MODULE" "edev")
 ;; Ropemacs
 (require 'pymacs)
 (setq ropemacs-enable-autoimport t)
 (pymacs-load "ropemacs" "rope-")
-(ac-ropemacs-setup)
+;; (ac-ropemacs-setup)
 (rope-open-project "/Users/alex/v/ellington/rope")
-;; https://github.com/fgallina/python.el
-(add-to-list 'load-path "/Users/alex/.emacs.d/python.el/")
-(require 'python)
+
 (setq python-shell-exec-path (list "/Users/alex/v/ellington/bin/")
       python-shell-interpreter "ipython"
       python-shell-interpreter-args ""
