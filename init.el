@@ -1,10 +1,6 @@
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/vendor")
 
-;; Keep customizations in a separate file
-(setq custom-file "~/.emacs.d/emacs-custom.el")
-(load custom-file 'noerror)
-
 (load "keybindings")
 
 ;; Common settings
