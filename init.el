@@ -70,10 +70,8 @@
              ")")))
 
   ;; the current major mode for the buffer.
-  " ["
-  '(:eval (propertize "%m" 'face 'font-lock-string-face
+  '(:eval (propertize (concat " " mode-name mode-line-process) 'face 'font-lock-string-face
                       'help-echo buffer-file-coding-system))
-  "]"
 
   ;; insert vs overwrite mode, input-method in a tooltip
   '(:eval (when overwrite-mode (propertize " Ovr"
