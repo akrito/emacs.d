@@ -22,57 +22,68 @@
   #+end_src
 
 * Keybindings
+** Global bindings
+   
+   #+begin_src emacs-lisp
+     
+     ;; Options
+     (normal-erase-is-backspace-mode 1)
+     
+     (global-set-key (kbd "C-|") 'shell-command-on-region)
+     (global-set-key (kbd "C-'") 'comment-dwim)
+     (global-set-key (kbd "M-RET") 'ns-toggle-fullscreen)
+     (global-set-key (kbd "M-0") 'delete-window)
+     (global-set-key (kbd "M-1") 'delete-other-windows)
+     (global-set-key (kbd "M-2") 'balance-windows)
+     (global-set-key (kbd "C-b") 'switch-to-buffer)
+     (global-set-key (kbd "s-c") 'kill-ring-save)
+     (global-set-key (kbd "M-D") 'split-window-vertically)
+     (global-set-key (kbd "M-d") 'split-window-horizontally)
+     (global-set-key (kbd "C-d") 'delete-char)
+     (global-set-key (kbd "C-S-f") 'rgrep)
+     (global-set-key (kbd "M-i") 'textmate-goto-symbol)
+     (global-set-key (kbd "C-l") 'goto-line)
+     (global-set-key (kbd "M-m") 'magit-status)
+     (global-set-key (kbd "C-S-n") 'make-frame-command)
+     (global-set-key (kbd "M-q") 'save-buffers-kill-terminal)
+     (global-set-key (kbd "M-r") 'revert-buffer)
+     (global-set-key (kbd "C-s") 'other-frame)
+     (global-set-key (kbd "C-t") 'multi-term-next)
+     (global-set-key (kbd "C-M-t") 'multi-term)
+     (global-set-key (kbd "C-t") 'textmate-goto-file)
+     (global-set-key (kbd "M-T") 'textmate-goto-symbol)
+     (global-set-key (kbd "s-v") 'yank)
+     (global-set-key (kbd "s-x") 'kill-region)
+     (global-set-key (kbd "C-z") 'undo)
+      
+   #+end_src
 
-  #+begin_src emacs-lisp
-    
-    ;; Bindings
-    (global-set-key (kbd "C-|") 'shell-command-on-region)
-    (global-set-key (kbd "C-'") 'comment-dwim)
-    (global-set-key (kbd "M-RET") 'ns-toggle-fullscreen)
-    (global-set-key (kbd "M-0") 'delete-window)
-    (global-set-key (kbd "M-1") 'delete-other-windows)
-    (global-set-key (kbd "M-2") 'balance-windows)
-    (global-set-key (kbd "C-b") 'switch-to-buffer)
-    (global-set-key (kbd "s-c") 'kill-ring-save)
-    (global-set-key (kbd "M-D") 'split-window-vertically)
-    (global-set-key (kbd "M-d") 'split-window-horizontally)
-    (global-set-key (kbd "C-d") 'delete-char)
-    (global-set-key (kbd "C-S-f") 'rgrep)
-    (global-set-key (kbd "M-i") 'textmate-goto-symbol)
-    (global-set-key (kbd "C-l") 'goto-line)
-    (global-set-key (kbd "M-m") 'magit-status)
-    (global-set-key (kbd "C-S-n") 'make-frame-command)
-    (global-set-key (kbd "M-q") 'save-buffers-kill-terminal)
-    (global-set-key (kbd "M-r") 'revert-buffer)
-    (global-set-key (kbd "C-s") 'other-frame)
-    (global-set-key (kbd "C-t") 'multi-term-next)
-    (global-set-key (kbd "C-M-t") 'multi-term)
-    (global-set-key (kbd "C-t") 'textmate-goto-file)
-    (global-set-key (kbd "M-T") 'textmate-goto-symbol)
-    (global-set-key (kbd "s-v") 'yank)
-    (global-set-key (kbd "s-x") 'kill-region)
-    (global-set-key (kbd "C-z") 'undo)
-    
-    ;; Overrides for keybindings major modes like to define
-    (defvar ak-keys-minor-mode-map (make-keymap) "ak-keys-minor-mode keymap.")
-    (define-key ak-keys-minor-mode-map (kbd "s-a") 'ido-execute-extended-command)
-    (define-key ak-keys-minor-mode-map (kbd "s-e") 'fill-paragraph)
-    (define-key ak-keys-minor-mode-map (kbd "C-f") 'isearch-forward)
-    (define-key ak-keys-minor-mode-map (kbd "C-o") 'find-file)
-    (define-key ak-keys-minor-mode-map (kbd "C-s") 'save-buffer)
-    (define-key ak-keys-minor-mode-map (kbd "C-w") 'kill-this-buffer)
-    (define-minor-mode ak-keys-minor-mode
-      "A minor mode so that my key settings override annoying major modes."
-      t " ak" 'ak-keys-minor-mode-map)
-    (ak-keys-minor-mode 1)
-    (defun ak-minibuffer-setup-hook ()
-      (ak-keys-minor-mode 0))
-    (add-hook 'minibuffer-setup-hook 'ak-minibuffer-setup-hook)
-    
-    ;; Options
-    (normal-erase-is-backspace-mode 1)
-    
-    ;; Support functions
+** My minor mode
+
+   #+begin_src emacs-lisp
+        
+     ;; Overrides for keybindings major modes like to define
+     (defvar ak-keys-minor-mode-map (make-keymap) "ak-keys-minor-mode keymap.")
+     (define-key ak-keys-minor-mode-map (kbd "s-a") 'ido-execute-extended-command)
+     (define-key ak-keys-minor-mode-map (kbd "s-e") 'fill-paragraph)
+     (define-key ak-keys-minor-mode-map (kbd "C-f") 'isearch-forward)
+     (define-key ak-keys-minor-mode-map (kbd "C-o") 'find-file)
+     (define-key ak-keys-minor-mode-map (kbd "C-s") 'save-buffer)
+     (define-key ak-keys-minor-mode-map (kbd "C-w") 'kill-this-buffer)
+     (define-minor-mode ak-keys-minor-mode
+       "A minor mode so that my key settings override annoying major modes."
+       t " ak" 'ak-keys-minor-mode-map)
+     (ak-keys-minor-mode 1)
+     (defun ak-minibuffer-setup-hook ()
+       (ak-keys-minor-mode 0))
+     (add-hook 'minibuffer-setup-hook 'ak-minibuffer-setup-hook)
+     
+   #+end_src
+
+** Support functions
+
+   #+begin_src emacs-lisp
+
     (add-hook 'isearch-mode-hook 'isearch-hook)
     (defun isearch-hook ()
       (define-key isearch-mode-map (kbd "M-;") 'isearch-repeat-forward)
@@ -266,7 +277,6 @@
     
     (require-package 'gist)
     (require-package 'magit)
-    (require-package 'magithub)
     (autoload 'gist-region "gist" "Gist" t)
     (autoload 'gist-list "gist" "Gist" t)
     (autoload 'gist-region-private "gist" "Gist" t)
@@ -361,29 +371,7 @@
     (add-to-list 'load-path "~/.emacs.d/vendor/python.el/")
     (require 'python)
     (setenv "DJANGO_SETTINGS_MODULE" "edev")
-    ;; Ropemacs
-    ;; (require 'pymacs)
-    ;; (setq ropemacs-enable-autoimport t)
-    ;; (pymacs-load "ropemacs" "rope-")
-    ;; ;; (ac-ropemacs-setup)
-    ;; (rope-open-project "/Users/alex/v/ellington/rope")
     
-    (setq python-shell-exec-path (list "/Users/alex/v/ellington/bin/")
-          python-shell-interpreter "ipython"
-          python-shell-interpreter-args ""
-          python-shell-process-environment (list
-                                            (format "PATH=%s" (mapconcat
-                                                               'identity
-                                                               (reverse
-                                                                (cons (getenv "PATH")
-                                                                      '("/Users/alex/v/ellington/bin/")))
-                                                               ":"))
-                                            "VIRTUAL_ENV=/Users/alex/v/ellington/")
-          python-shell-prompt-regexp "In \\[[0-9]+\\]: "
-          python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
-          python-shell-completion-setup-code ""
-          python-shell-completion-string-code "';'.join(__IP.complete('''%s'''))\n")
-         
    #+end_src
    
 ** Org mode
