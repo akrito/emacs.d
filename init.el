@@ -1,5 +1,14 @@
 (add-to-list 'load-path "~/.emacs.d")
-(add-to-list 'load-path "~/.emacs.d/vendor")
+
+;; Packaging
+(require 'package)
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+(package-initialize)
+(when (not package-archive-contents)
+  (package-refresh-contents))
+(defun require-package (p)
+    (when (not (package-installed-p p))
+    (package-install p)))
 
 (load "keybindings")
 
@@ -23,8 +32,6 @@
       focus-follows-mouse t
       frame-title-format '((buffer-file-truename "%f" "%b"))
       echo-keystrokes 0.01
-      gist-view-gist t
-      ido-work-directory-list-ignore-regexps '("^/s/")
       inhibit-startup-screen t
       kill-read-only-ok t
       make-backup-files nil
@@ -33,15 +40,7 @@
       mouse-drag-copy-region nil
       mouse-wheel-progressive-speed nil
       mouse-wheel-scroll-amount '(2 ((shift) . 1) ((control)))
-      org-agenda-files '("~/wiki/wiki.org_archive")
- '(org-agenda-files (quote ("/Users/alex/org/life.org" "/Users/alex/org/log.org" "/Users/alex/org/mobileorg.org" "/Users/alex/org/readability.org" "/Users/alex/org/work.org")) t)
-
       ring-bell-function 'ignore
-      show-trailing-whitespace t
-      speedbar-hide-button-brackets-flag t
-      speedbar-indentation-width 2
-      speedbar-show-unknown-files t
-      speedbar-use-images nil
       starttls-use-gnutls t
       thing-at-point-file-name-chars "-~/[:alnum:]_.${}#%,"
       truncate-partial-width-windows nil
@@ -55,18 +54,15 @@
  mode-line-format
  (list
   ;; the buffer name; the file name as a tool tip
-  '(:eval (if buffer-file-truename
-              (propertize "%f" 'face 'font-lock-keyword-face
-                          'help-echo (buffer-file-name))
-            (propertize "%b" 'face 'font-lock-keyword-face
-                        'help-echo (buffer-file-name))))
+  '(:eval (propertize "%b" 'face 'font-lock-keyword-face
+                      'help-echo buffer-file-truename))
 
   ;; line and column
   '(:eval (when buffer-file-truename
             (concat
              " (" ;; '%02' to set to 2 chars at least; prevents flickering
              (propertize "%02l" 'face 'font-lock-type-face) ","
-             (propertize "%02c" 'face 'font-lock-type-face) 
+             (propertize "%02c" 'face 'font-lock-type-face)
              ")")))
 
   ;; the current major mode for the buffer.
@@ -76,8 +72,7 @@
   ;; insert vs overwrite mode, input-method in a tooltip
   '(:eval (when overwrite-mode (propertize " Ovr"
                       'face 'font-lock-preprocessor-face
-                      'help-echo (concat "Buffer is in "
-                                         (if overwrite-mode "overwrite" "insert") " mode"))))
+                      'help-echo (concat "Buffer is in overwrite mode"))))
 
   ;; was this buffer modified since the last save?
   '(:eval (when (and buffer-file-truename (buffer-modified-p))
@@ -90,26 +85,16 @@
             (propertize " RO"
                                      'face 'font-lock-type-face
                                      'help-echo "Buffer is read-only")))
-  ))
+))
 
 ;; Colors and pretty things
-(add-to-list 'load-path "~/.emacs.d/vendor/color-theme/")
-(require 'color-theme)
-(color-theme-initialize)
-
-(load-file "~/.emacs.d/vendor/solarized/emacs-color-theme-solarized/color-theme-solarized.el")
-
-;; dark theme
-(color-theme-solarized-dark)
-(add-to-list 'initial-frame-alist '(cursor-color . "#748284"))
-(add-to-list 'default-frame-alist '(cursor-color . "#748284"))
-
-;; light theme
-;; (color-theme-solarized-light)
-;; (add-to-list 'initial-frame-alist '(cursor-color . "#748284"))
-;; (add-to-list 'default-frame-alist '(cursor-color . "#748284"))
+(add-to-list 'custom-theme-load-path "~/.emacs.d/vendor/emacs-color-theme-solarized/")
+(add-to-list 'load-path "~/.emacs.d/vendor/emacs-color-theme-solarized/")
+(setq solarized-bold nil) ;; bold looks like crap with the Ubuntu font
+(load-theme 'solarized-light t)
 
 ;; parentheses
+(require-package 'autopair)
 (show-paren-mode t)
 (require 'autopair)
 (autopair-global-mode 1)
@@ -121,20 +106,10 @@
 (add-hook 'comint-mode-hook 'comint-hook)
 (add-hook 'term-mode-hook 'comint-hook)
 
-;; Better terminal
-(require 'multi-term)
-(setq
- multi-term-program "/Users/alex/bin/bash_login"
- term-bind-key-alist '(("C-c C-c" . term-send-raw) ("M-ESC" . term-send-raw-meta) ("M-v" . term-paste) ("C-p" . previous-line) ("C-n" . next-line) ("C-s" . isearch-forward) ("C-r" . isearch-backward) ("C-m" . term-send-raw) ("M-f" . term-send-forward-word) ("M-b" . term-send-backward-word) ("M-o" . term-send-backspace) ("M-p" . term-send-up) ("M-n" . term-send-down) ("M-M" . term-send-forward-kill-word) ("M-N" . term-send-backward-kill-word) ("M-r" . term-send-reverse-search-history) ("M-," . term-send-input) ("<M-backspace>" . term-send-raw-meta) ("M-." . comint-dynamic-complete))
- term-default-bg-color "#002028"
- term-default-fg-color "#748284"
- ;; For some reason, Ubuntu has terminfo entries for Eterm* but not eterm*
- term-term-name "Eterm-color"
- term-unbind-key-list '("C-c C-c" "ESC" "C-f" "C-o" "C-t" "C-b" "C-z" "C-x" "C-h" "C-y" "<ESC>")
-)
-
 ;; Git
-(add-to-list 'load-path "~/.emacs.d/vendor/magit")
+(require-package 'gist)
+(require-package 'magit)
+(require-package 'magithub)
 (autoload 'gist-region "gist" "Gist" t)
 (autoload 'gist-list "gist" "Gist" t)
 (autoload 'gist-region-private "gist" "Gist" t)
@@ -142,9 +117,11 @@
 (autoload 'gist-region-or-buffer-private "gist" "Gist" t)
 (autoload 'magit-status "magit" nil t)
 (setq magit-log-cutoff-length 1000)
+(setq gist-view-gist t)
 
 ;; Auto-complete
-(add-to-list 'load-path "~/.emacs.d/vendor/auto-complete")
+(require-package 'auto-complete)
+(require-package 'yasnippet)
 (require 'auto-complete-config)
 (ac-config-default)
 (ac-set-trigger-key "TAB")
@@ -154,7 +131,6 @@
 (setq-default ac-sources '(ac-source-yasnippet ac-source-imenu ac-source-filename ac-source-words-in-same-mode-buffers))
 (global-auto-complete-mode 1)
 ;; yasnippet - will only be used with autocomplete
-(add-to-list 'load-path "~/.emacs.d/vendor/yasnippet-0.6.1c")
 (require 'yasnippet)
 ;; assign to unused key, since we won't be using it
 (setq yas/trigger-key (kbd "C-c <kp-multiply>"))
@@ -171,7 +147,8 @@
        uniquify-strip-common-suffix nil
        uniquify-separator           "/"
        uniquify-after-kill-buffer-p t
-       uniquify-ignore-buffers-re   "^\\*")
+       uniquify-ignore-buffers-re   "^\\*"
+       uniquify-min-dir-content 1)
 
 ;; ido.el - better buffer and filename completion
 (autoload 'ido-mode "ido")
@@ -184,7 +161,7 @@
                  "\\*magit.*\\*")
 
 ;; textmate features
-(add-to-list 'load-path "~/.emacs.d/vendor/textmate.el/")
+(require-package 'textmate)
 (require 'textmate)
 
 ;; File type support
@@ -195,11 +172,11 @@
 (require 'python)
 (setenv "DJANGO_SETTINGS_MODULE" "edev")
 ;; Ropemacs
-(require 'pymacs)
-(setq ropemacs-enable-autoimport t)
-(pymacs-load "ropemacs" "rope-")
-;; (ac-ropemacs-setup)
-(rope-open-project "/Users/alex/v/ellington/rope")
+;; (require 'pymacs)
+;; (setq ropemacs-enable-autoimport t)
+;; (pymacs-load "ropemacs" "rope-")
+;; ;; (ac-ropemacs-setup)
+;; (rope-open-project "/Users/alex/v/ellington/rope")
 
 (setq python-shell-exec-path (list "/Users/alex/v/ellington/bin/")
       python-shell-interpreter "ipython"
@@ -217,23 +194,24 @@
       python-shell-completion-setup-code ""
       python-shell-completion-string-code "';'.join(__IP.complete('''%s'''))\n")
      
-;; Haskell
-(autoload 'haskell-mode "~/.emacs.d/haskell-mode/haskell-site-file" "Haskell mode" t)
-(add-to-list 'auto-mode-alist '("\\.hs$" . haskell-mode))
-(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
-(add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
-
 ;; org mode
+(require 'org-install)
 (setq org-agenda-files (list "~/org")
       org-hide-leading-stars t
       org-log-done t
       org-agenda-skip-archived-trees nil
       org-highlight-sparse-tree-matches nil)
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-(setq org-mobile-directory "~/org/mobile")
+(setq org-mobile-directory "~/Dropbox/MobileOrg")
 (setq org-directory "~/org")
 (setq org-mobile-inbox-for-pull "~/org/inbox.org")
+(setq org-default-notes-file (concat org-directory "/notes.org"))
+(define-key global-map "\C-cc" 'org-capture)
+(setq org-capture-templates
+      '(("t" "Todo" entry (file+headline "~/org/gtd.org" "Tasks")
+         "* TODO %?\n  %i\n  %a")
+        ("j" "Journal" entry (file+datetree "~/org/journal.org")
+         "* %?\nEntered on %U\n  %i\n  %a")))
 
 ;; yaml
 (autoload 'yaml-mode "yaml-mode" "YAML Ain't Markup Language" t)
@@ -247,6 +225,7 @@
 (setq ruby-indent-level 4)
 
 ;; markdown
+(require-package 'markdown-mode)
 (autoload 'markdown-mode "markdown-mode" "markdown" t)
 (add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
 
@@ -264,16 +243,6 @@
 ;; Lua support
 (autoload 'lua-mode "lua-mode" "Edit Lua scripts" t)
 (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
-
-;; Scala
-(add-to-list 'load-path "/usr/local//Cellar/scala/2.8.1/libexec/misc/scala-tool-support/emacs")
-(load "scala-mode-auto.el")
-;; Ensime
-(add-to-list 'load-path "~/.emacs.d/vendor/ensime/elisp/")
-(require 'ensime)
-(add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
-;; MINI HOWTO: 
-;; Open .scala file. M-x ensime (once per project)
 
 ;; Platform-specific overrides
 (if (eq system-type 'darwin)

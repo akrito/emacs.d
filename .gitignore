@@ -18,3 +18,4 @@ abbrev_defs
 ensime/
 local.el
 *.elc
+elpa/
