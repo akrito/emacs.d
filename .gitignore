@@ -19,3 +19,4 @@ ensime/
 local.el
 *.elc
 elpa/
+emacs.el
