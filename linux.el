@@ -5,3 +5,4 @@
       ;; hack to force the pointer shape to change
       (set-mouse-color "black")
       (menu-bar-mode 0)))
+(set-face-attribute 'default nil :font "Ubuntu Mono-7.5")
