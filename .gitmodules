@@ -1,33 +1,6 @@
-[submodule "gist"]
-	path = vendor/gist
-	url = http://github.com/defunkt/gist.el.git
-[submodule "markdown-mode"]
-	path = vendor/markdown-mode
-	url = git://jblevins.org/git/markdown-mode.git
-[submodule "python-den"]
-	path = vendor/python-den
-	url = git@github.com:akrito/python-den.git
-[submodule "python.el"]
+[submodule "vendor/python.el"]
 	path = vendor/python.el
 	url = git://github.com/fgallina/python.el.git
-[submodule "auto-complete"]
-	path = vendor/auto-complete
-	url = git://github.com/m2ym/auto-complete.git
-[submodule "acme-mouse"]
-        path = vendor/acme-mouse
-        url = git://github.com/akrito/acme-mouse.git
-[submodule "vendor/solarized"]
-	path = vendor/solarized
-	url = git://github.com/akrito/solarized.git
-[submodule "vendor/textmate.el"]
-	path = vendor/textmate.el
-	url = git://github.com/defunkt/textmate.el.git
-[submodule "vendor/haskell-mode"]
-	path = vendor/haskell-mode
-	url = git://github.com/emacsmirror/haskell-mode.git
-[submodule "vendor/magit"]
-	path = vendor/magit
-	url = git://github.com/magit/magit.git
-[submodule "vendor/color-theme"]
-	path = vendor/color-theme
-	url = git://github.com/emacsmirror/color-theme.git
+[submodule "vendor/emacs-color-theme-solarized"]
+	path = vendor/emacs-color-theme-solarized
+	url = git://github.com/sellout/emacs-color-theme-solarized.git
