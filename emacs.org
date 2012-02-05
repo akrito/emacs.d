@@ -9,34 +9,32 @@
 * Packaging
 
   #+begin_src emacs-lisp
-
+    
     (require 'package)
     (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+    (add-to-list 'package-archives '("ELPA" . "http://tromey.com/elpa/"))
     (package-initialize)
     (when (not package-archive-contents)
       (package-refresh-contents))
     (defun require-package (p)
         (when (not (package-installed-p p))
         (package-install p)))
-
+    
   #+end_src
 
 * Keybindings
 ** Global bindings
-   
+
    #+begin_src emacs-lisp
      
-     ;; Options
-     (normal-erase-is-backspace-mode 1)
-     
      (global-set-key (kbd "C-|") 'shell-command-on-region)
-     (global-set-key (kbd "C-'") 'comment-dwim)
      (global-set-key (kbd "M-RET") 'ns-toggle-fullscreen)
      (global-set-key (kbd "M-0") 'delete-window)
      (global-set-key (kbd "M-1") 'delete-other-windows)
      (global-set-key (kbd "M-2") 'balance-windows)
      (global-set-key (kbd "C-b") 'switch-to-buffer)
      (global-set-key (kbd "s-c") 'kill-ring-save)
+     (global-set-key (kbd "C-S-c") 'kill-ring-save)
      (global-set-key (kbd "M-D") 'split-window-vertically)
      (global-set-key (kbd "M-d") 'split-window-horizontally)
      (global-set-key (kbd "C-d") 'delete-char)
@@ -50,7 +48,9 @@
      (global-set-key (kbd "C-t") 'multi-term-next)
      (global-set-key (kbd "C-M-t") 'multi-term)
      (global-set-key (kbd "s-v") 'yank)
+     (global-set-key (kbd "C-S-v") 'yank)
      (global-set-key (kbd "s-x") 'kill-region)
+     (global-set-key (kbd "C-S-x") 'kill-region)
      (global-set-key (kbd "C-z") 'undo)
       
    #+end_src
@@ -66,6 +66,8 @@
      (define-key ak-keys-minor-mode-map (kbd "C-o") 'find-file)
      (define-key ak-keys-minor-mode-map (kbd "C-s") 'save-buffer)
      (define-key ak-keys-minor-mode-map (kbd "C-w") 'kill-this-buffer)
+     (define-key ak-keys-minor-mode-map (kbd "C-'") 'comment-dwim)
+     (define-key ak-keys-minor-mode-map (kbd "C-/") 'ac-trigger-key-command)
      (define-minor-mode ak-keys-minor-mode
        "A minor mode so that my key settings override annoying major modes."
        t " ak" 'ak-keys-minor-mode-map)
@@ -99,17 +101,18 @@
       )
         
   #+end_src
-
+   
 * Common settings
 
   #+begin_src emacs-lisp
-
+    
     (ansi-color-for-comint-mode-on)
     (blink-cursor-mode -1)
     (delete-selection-mode t)
     (fset 'yes-or-no-p 'y-or-n-p)
     (global-auto-revert-mode 1)
     (global-hl-line-mode 1)
+    (normal-erase-is-backspace-mode 1)
     (server-start)
     (set-fringe-mode 1)
     (scroll-bar-mode -1)
@@ -118,7 +121,7 @@
     (setq auto-save-list-file-prefix nil
           bookmark-save-flag 1
           browse-url-browser-function 'browse-url-generic
-          browse-url-generic-program "open"
+          browse-url-generic-program "exo-open"
           custom-raised-buttons nil
           focus-follows-mouse t
           frame-title-format '((buffer-file-truename "%f" "%b"))
@@ -133,6 +136,7 @@
           mouse-wheel-scroll-amount '(2 ((shift) . 1) ((control)))
           ring-bell-function 'ignore
           starttls-use-gnutls t
+          tab-width 4
           thing-at-point-file-name-chars "-~/[:alnum:]_.${}#%,"
           truncate-partial-width-windows nil
           vc-follow-symlinks t
@@ -177,18 +181,20 @@
                                          'face 'font-lock-type-face
                                          'help-echo "Buffer is read-only")))
     ))
-
+    
   #+end_src
 
 * Colors
 
   #+begin_src emacs-lisp
-
+    
     ;; Colors and pretty things
     (add-to-list 'custom-theme-load-path "~/.emacs.d/vendor/emacs-color-theme-solarized/")
     (add-to-list 'load-path "~/.emacs.d/vendor/emacs-color-theme-solarized/")
     (setq solarized-bold nil) ;; bold looks like crap with the Ubuntu font
-    (load-theme 'solarized-light t)
+    (load-theme 'solarized-dark t)
+    (add-to-list 'default-frame-alist
+          '(cursor-color . "#888888"))
     
   #+end_src
 
@@ -268,30 +274,25 @@
 
   #+end_src
     
-* Ido
+* Ido/Smex
 
   #+begin_src emacs-lisp
     
+    (require-package 'smex)
+    (smex-initialize)
     (autoload 'ido-mode "ido")
     (ido-mode t)
     (setq ido-max-directory-size 200000)
-    (defun ido-execute-extended-command ()
-      (interactive)
-      (call-interactively
-       (intern
-        (ido-completing-read
-         "M-a "
-         (all-completions "" obarray 'commandp)))))
-    (define-key ak-keys-minor-mode-map (kbd "s-a") 'ido-execute-extended-command)
+    (define-key ak-keys-minor-mode-map (kbd "M-a") 'smex)
+    (define-key ak-keys-minor-mode-map (kbd "M-A") 'smex-major-mode-commands)
     
   #+end_src
 
-* Midnignt mode
+* Midnight mode
   Cleans up unused buffers.
 
   #+begin_src emacs-lisp
 
-    ;; Midnight mode
     (midnight-delay-set 'midnight-delay "12:00am")
     (add-to-list 'clean-buffer-list-kill-regexps
                      "\\*magit.*\\*")
@@ -302,7 +303,6 @@
 
   #+begin_src emacs-lisp
     
-    ;; textmate features
     (require-package 'textmate)
     (require 'textmate)
     (global-set-key (kbd "M-i") 'textmate-goto-symbol)
@@ -311,39 +311,113 @@
     
   #+end_src
   
+* Play well with tiling window managers, a.k.a one-on-one
+  Just comment this out if we're not using a nice window manager
+
+  #+begin_src emacs-lisp
+        
+    (setq pop-up-frames t)
+    (setq special-display-buffer-names
+          '(
+            ("*Completions*" (same-frame t))
+            ("*anything*" (same-frame t))
+            ("*Ido Completions*" (same-frame t))
+            ("*magit-edit-log*" (same-frame t))
+            ))
+    
+  #+end_src
+* Better ansi-term with byobu
+  Not working - uncomment later. In a hook, we want to:
+
+  (setq mode-line-format nil)
+
+  and then redefine this:
+
+  (defun term-check-size (process)
+    (when (or (/= term-height (window-height))
+           (/= term-width (term-window-width)))
+      (term-reset-size (window-height) (term-window-width))
+      (set-process-window-size process term-height term-width)))
+
 * File type support
+** JSON
+   #+begin_src emacs-lisp
+     
+     (add-to-list 'auto-mode-alist '("\\.json$" . js2-mode))
+     
+     (defadvice js2-reparse (before json)
+             (setq js2-buffer-file-name buffer-file-name))
+     (ad-activate 'js2-reparse)
+     
+     (defadvice js2-parse-statement (around json)
+             (if (and (= tt js2-LC)
+                             js2-buffer-file-name
+                             (string-equal (substring js2-buffer-file-name -5) ".json")
+                             (eq (+ (save-excursion
+                                                     (goto-char (point-min))
+                                                     (back-to-indentation)
+                                                     (while (eolp)
+                                                             (next-line)
+                                                             (back-to-indentation))
+                                                     (point)) 1) js2-ts-cursor))
+                     (setq ad-return-value (js2-parse-assign-expr))
+                     ad-do-it))
+     (ad-activate 'js2-parse-statement)
+     
+   #+end_src
+
+** Deft
+
+   #+begin_src emacs-lisp
+     
+     (require 'deft)
+     (setq deft-directory "~/Dropbox/notes")
+     (setq deft-use-filename-as-title t)
+     
+   #+end_src
+
+** GO
+
+   #+begin_src emacs-lisp
+     
+     (add-to-list 'load-path "/opt/go/misc/emacs/")
+     (require 'go-mode-load)
+     
+   #+end_src
+
 ** Python
    
    #+begin_src emacs-lisp
-
-    ;; https://github.com/fgallina/python.el
-    (add-to-list 'load-path "~/.emacs.d/vendor/python.el/")
-    (require 'python)
-    
+     
+     ;; https://github.com/fgallina/python.el
+     ;; (add-to-list 'load-path "~/.emacs.d/vendor/python.el/")
+     ;; (require 'python)
+     
    #+end_src
    
 ** Org mode
 
    #+begin_src emacs-lisp
-
-    (require 'org-install)
-    (setq org-agenda-files (list "~/org")
-          org-hide-leading-stars t
-          org-log-done t
-          org-agenda-skip-archived-trees nil
-          org-highlight-sparse-tree-matches nil)
-    (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-    (setq org-mobile-directory "~/Dropbox/MobileOrg")
-    (setq org-directory "~/org")
-    (setq org-mobile-inbox-for-pull "~/org/inbox.org")
-    (setq org-default-notes-file (concat org-directory "/notes.org"))
-    (define-key global-map "\C-cc" 'org-capture)
-    (setq org-capture-templates
-          '(("t" "Todo" entry (file+headline "~/org/gtd.org" "Tasks")
-             "* TODO %?\n  %i\n  %a")
-            ("j" "Journal" entry (file+datetree "~/org/journal.org")
-             "* %?\nEntered on %U\n  %i\n  %a")))
-
+     
+     (require 'org-install)
+     (setq org-agenda-files (list "~/org")
+           org-hide-leading-stars t
+           org-log-done t
+           org-agenda-skip-archived-trees nil
+           org-highlight-sparse-tree-matches nil)
+     (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+     (setq org-mobile-directory "~/Dropbox/MobileOrg")
+     (setq org-directory "~/org")
+     (setq org-mobile-inbox-for-pull "~/org/inbox.org")
+     (setq org-default-notes-file (concat org-directory "/notes.org"))
+     (define-key global-map "\C-cc" 'org-capture)
+     (setq org-capture-templates
+           '(("t" "Todo" entry (file+headline "~/org/gtd.org" "Tasks")
+              "* TODO %?\n  %i\n  %a")
+             ("j" "Journal" entry (file+datetree "~/org/journal.org")
+              "* %?")))
+     (setq org-mobile-force-id-on-agenda-items nil)
+     
    #+end_src
    
 ** YAML
@@ -403,10 +477,10 @@
    #+end_src
    
 * Platform-specific overrides
+  On X11, change the pointer to an arrow, and remove the menu bar
 
   #+begin_src emacs-lisp
 
-    ;; On X11, change the pointer to an arrow, and remove the menu bar
     (if (boundp 'x-pointer-arrow)
         (progn
           (setq-default x-pointer-shape x-pointer-arrow)
@@ -419,6 +493,6 @@
           (setq mac-command-modifier (quote meta))
           (setq mac-option-modifier (quote alt))
           (set-default-font "Inconsolata-13"))
-      (set-face-attribute 'default nil :font "Ubuntu Mono-7.5"))
+      (set-face-attribute 'default nil :font "DejaVu Sans Mono-7.5"))
     
   #+end_src
