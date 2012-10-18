@@ -20,3 +20,8 @@ local.el
 *.elc
 elpa/
 emacs.el
+bookmarks
+alex
+eshell/
+image-dired/
+thumbs/
