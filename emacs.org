@@ -3,7 +3,8 @@
   #+begin_src emacs-lisp
     
     (add-to-list 'load-path "~/.emacs.d")
-
+    (add-to-list 'load-path "~/.emacs.d/vendor")
+    
   #+end_src
 
 * Packaging
@@ -13,12 +14,17 @@
     (require 'package)
     (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
     (add-to-list 'package-archives '("ELPA" . "http://tromey.com/elpa/"))
+    (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+    
     (package-initialize)
     (when (not package-archive-contents)
       (package-refresh-contents))
-    (defun require-package (p)
-        (when (not (package-installed-p p))
+    (defun ensure-package (p)
+      (when (not (package-installed-p p))
         (package-install p)))
+    (defun require-package (p)
+      (ensure-package p)
+      (require p))
     
   #+end_src
 
@@ -27,47 +33,55 @@
 
    #+begin_src emacs-lisp
      
-     (global-set-key (kbd "C-|") 'shell-command-on-region)
+     (if (eq system-type 'darwin)
+         (progn
+           (setq mac-command-modifier (quote meta))
+           (setq mac-option-modifier (quote alt))))
+     
      (global-set-key (kbd "M-RET") 'ns-toggle-fullscreen)
+     (global-set-key (kbd "M-.") 'repeat-complex-command)
+     (global-set-key (kbd "C-;") 'iedit-mode)
      (global-set-key (kbd "M-0") 'delete-window)
      (global-set-key (kbd "M-1") 'delete-other-windows)
      (global-set-key (kbd "M-2") 'balance-windows)
-     (global-set-key (kbd "C-b") 'switch-to-buffer)
-     (global-set-key (kbd "s-c") 'kill-ring-save)
+     (global-set-key (kbd "M-b") 'speedbar-get-focus)
+     (global-set-key (kbd "M-c") 'kill-ring-save)
      (global-set-key (kbd "C-S-c") 'kill-ring-save)
-     (global-set-key (kbd "M-D") 'split-window-vertically)
-     (global-set-key (kbd "M-d") 'split-window-horizontally)
-     (global-set-key (kbd "C-d") 'delete-char)
+     (global-set-key (kbd "C-d") 'er/expand-region)
      (global-set-key (kbd "C-S-f") 'rgrep)
      (global-set-key (kbd "C-l") 'goto-line)
-     (global-set-key (kbd "M-m") 'magit-status)
      (global-set-key (kbd "C-S-n") 'make-frame-command)
      (global-set-key (kbd "M-q") 'save-buffers-kill-terminal)
      (global-set-key (kbd "M-r") 'revert-buffer)
      (global-set-key (kbd "C-s") 'other-frame)
-     (global-set-key (kbd "C-t") 'multi-term-next)
      (global-set-key (kbd "C-M-t") 'multi-term)
-     (global-set-key (kbd "s-v") 'yank)
+     (global-set-key (kbd "M-v") 'yank)
      (global-set-key (kbd "C-S-v") 'yank)
-     (global-set-key (kbd "s-x") 'kill-region)
-     (global-set-key (kbd "C-S-x") 'kill-region)
+     (global-set-key (kbd "C-x C-d") 'ido-dired)
+     (global-set-key (kbd "M-x") 'kill-region)
      (global-set-key (kbd "C-z") 'undo)
-      
+     
    #+end_src
 
 ** My minor mode
+   Overrides for keybindings major modes like to define
 
    #+begin_src emacs-lisp
         
-     ;; Overrides for keybindings major modes like to define
      (defvar ak-keys-minor-mode-map (make-keymap) "ak-keys-minor-mode keymap.")
+     (define-key ak-keys-minor-mode-map (kbd "C-b") 'switch-to-buffer)
+     (define-key ak-keys-minor-mode-map (kbd "M-D") 'split-window-vertically)
+     (define-key ak-keys-minor-mode-map (kbd "M-d") 'split-window-horizontally)
      (define-key ak-keys-minor-mode-map (kbd "s-e") 'fill-paragraph)
      (define-key ak-keys-minor-mode-map (kbd "C-f") 'isearch-forward)
+     (define-key ak-keys-minor-mode-map (kbd "M-m") 'magit-status)
      (define-key ak-keys-minor-mode-map (kbd "C-o") 'find-file)
      (define-key ak-keys-minor-mode-map (kbd "C-s") 'save-buffer)
+     (define-key ak-keys-minor-mode-map (kbd "C-t") 'textmate-goto-file)
      (define-key ak-keys-minor-mode-map (kbd "C-w") 'kill-this-buffer)
      (define-key ak-keys-minor-mode-map (kbd "C-'") 'comment-dwim)
      (define-key ak-keys-minor-mode-map (kbd "C-/") 'ac-trigger-key-command)
+     
      (define-minor-mode ak-keys-minor-mode
        "A minor mode so that my key settings override annoying major modes."
        t " ak" 'ak-keys-minor-mode-map)
@@ -81,31 +95,38 @@
 ** Support functions
 
    #+begin_src emacs-lisp
-
-    (add-hook 'isearch-mode-hook 'isearch-hook)
-    (defun isearch-hook ()
-      (define-key isearch-mode-map (kbd "M-;") 'isearch-repeat-forward)
-      (define-key isearch-mode-map (kbd "C-f") 'isearch-repeat-forward)
-      (define-key isearch-mode-map (kbd "M-:") 'isearch-repeat-backward)
-      
-      (define-key isearch-mode-map (kbd "M-p") 'recenter) ; was isearch-ring-retreat
-      (define-key isearch-mode-map (kbd "M-n") 'nil) ; was isearch-ring-advance
-      (define-key isearch-mode-map (kbd "<f11>") 'isearch-ring-retreat)
-      (define-key isearch-mode-map (kbd "<f12>") 'isearch-ring-advance)
-      
-      (define-key isearch-mode-map (kbd "M-y") 'nil) ; was isearch-yank-kill
-      
-      (define-key isearch-mode-map (kbd "M-c") 'kill-ring-save) ; was isearch-toggle-case-fold
-      (define-key isearch-mode-map (kbd "M-r") 'isearch-toggle-regexp)
-      (define-key isearch-mode-map (kbd "M-e") 'backward-kill-word) ; was isearch-edit-string
-      )
-        
+     
+     (defun speedbar-hook ()
+       (interactive)
+       (speedbar-get-focus)
+       (speedbar-expand-line)
+       (speedbar-get-focus))
+     
+     (add-hook 'isearch-mode-hook 'isearch-hook)
+     (defun isearch-hook ()
+       (define-key isearch-mode-map (kbd "M-;") 'isearch-repeat-forward)
+       (define-key isearch-mode-map (kbd "C-f") 'isearch-repeat-forward)
+       (define-key isearch-mode-map (kbd "M-:") 'isearch-repeat-backward)
+       
+       (define-key isearch-mode-map (kbd "M-p") 'recenter) ; was isearch-ring-retreat
+       (define-key isearch-mode-map (kbd "M-n") 'nil) ; was isearch-ring-advance
+       (define-key isearch-mode-map (kbd "<f11>") 'isearch-ring-retreat)
+       (define-key isearch-mode-map (kbd "<f12>") 'isearch-ring-advance)
+       
+       (define-key isearch-mode-map (kbd "M-y") 'nil) ; was isearch-yank-kill
+       
+       (define-key isearch-mode-map (kbd "M-c") 'kill-ring-save) ; was isearch-toggle-case-fold
+       (define-key isearch-mode-map (kbd "M-r") 'isearch-toggle-regexp)
+       (define-key isearch-mode-map (kbd "M-e") 'backward-kill-word) ; was isearch-edit-string
+       )
+         
+     
   #+end_src
-   
+
 * Common settings
 
   #+begin_src emacs-lisp
-    
+           
     (ansi-color-for-comint-mode-on)
     (blink-cursor-mode -1)
     (delete-selection-mode t)
@@ -114,10 +135,11 @@
     (global-hl-line-mode 1)
     (normal-erase-is-backspace-mode 1)
     (server-start)
-    (set-fringe-mode 1)
+    (fringe-mode 0)
     (scroll-bar-mode -1)
     (tool-bar-mode -1)
     (winner-mode 1)
+    (which-function-mode 1)
     (setq auto-save-list-file-prefix nil
           bookmark-save-flag 1
           browse-url-browser-function 'browse-url-generic
@@ -135,6 +157,7 @@
           mouse-wheel-progressive-speed nil
           mouse-wheel-scroll-amount '(2 ((shift) . 1) ((control)))
           ring-bell-function 'ignore
+          split-width-threshold 200
           starttls-use-gnutls t
           tab-width 4
           thing-at-point-file-name-chars "-~/[:alnum:]_.${}#%,"
@@ -145,41 +168,21 @@
      fill-column 79
      cursor-type 'bar
      ispell-program-name "aspell"
-     indent-tabs-mode nil
+     indent-tabs-mode nil)
+    (require 'powerline)
+    (setq-default
      mode-line-format
-     (list
-      ;; the buffer name; the file name as a tool tip
-      '(:eval (propertize "%b" 'face 'font-lock-keyword-face
-                          'help-echo buffer-file-truename))
-    
-      ;; line and column
-      '(:eval (when buffer-file-truename
-                (concat
-                 " (" ;; '%02' to set to 2 chars at least; prevents flickering
-                 (propertize "%02l" 'face 'font-lock-type-face) ","
-                 (propertize "%02c" 'face 'font-lock-type-face)
-                 ")")))
-    
-      ;; the current major mode for the buffer.
-      '(:eval (propertize (concat " " mode-name mode-line-process) 'face 'font-lock-string-face
-                          'help-echo buffer-file-coding-system))
-    
-      ;; insert vs overwrite mode, input-method in a tooltip
-      '(:eval (when overwrite-mode (propertize " Ovr"
-                          'face 'font-lock-preprocessor-face
-                          'help-echo (concat "Buffer is in overwrite mode"))))
-    
-      ;; was this buffer modified since the last save?
-      '(:eval (when (and buffer-file-truename (buffer-modified-p))
-                (propertize " Mod"
-                                         'face 'font-lock-warning-face
-                                         'help-echo "Buffer has been modified")))
-    
-      ;; is this buffer read-only?
-      '(:eval (when buffer-read-only
-                (propertize " RO"
-                                         'face 'font-lock-type-face
-                                         'help-echo "Buffer is read-only")))
+     '((:eval (propertize "%e" 'face 'error))
+       (:eval (propertize "%b" 'face 'mode-line-buffer-id))
+       (:eval (when (and buffer-file-truename (buffer-modified-p))
+                (propertize " 💣" 'face 'mode-line-buffer-id)))
+       (:eval (propertize " " 'face 'mode-line-buffer-id))
+       (:eval (propertize " " 'display (powerline-arrow-right 'mode-line-buffer-id 'mode-line)))
+       " %02l,%02c "
+       mode-line-modes
+       (global-mode-string("" global-mode-string))
+       (:eval (propertize " " 'display (powerline-arrow-right 'mode-line 'default)))
+       (:eval (propertize "%-" 'face '(:foreground "black" :background "black")))
     ))
     
   #+end_src
@@ -187,14 +190,10 @@
 * Colors
 
   #+begin_src emacs-lisp
-    
+        
     ;; Colors and pretty things
-    (add-to-list 'custom-theme-load-path "~/.emacs.d/vendor/emacs-color-theme-solarized/")
-    (add-to-list 'load-path "~/.emacs.d/vendor/emacs-color-theme-solarized/")
-    (setq solarized-bold nil) ;; bold looks like crap with the Ubuntu font
-    (load-theme 'solarized-dark t)
-    (add-to-list 'default-frame-alist
-          '(cursor-color . "#888888"))
+    (load-theme 'holo-dark t)
+    ;; (load-theme 'solarized-light t)
     
   #+end_src
 
@@ -204,7 +203,6 @@
 
     (require-package 'autopair)
     (show-paren-mode t)
-    (require 'autopair)
     (autopair-global-mode 1)
     (setq autopair-autowrap t)
     (put 'autopair-backspace 'delete-selection 'supersede)
@@ -220,8 +218,8 @@
 
   #+begin_src emacs-lisp
     
-    (require-package 'gist)
-    (require-package 'magit)
+    (ensure-package 'gist)
+    (ensure-package 'magit)
     (autoload 'gist-region "gist" "Gist" t)
     (autoload 'gist-list "gist" "Gist" t)
     (autoload 'gist-region-private "gist" "Gist" t)
@@ -229,34 +227,49 @@
     (autoload 'gist-region-or-buffer-private "gist" "Gist" t)
     (autoload 'magit-status "magit" nil t)
     (setq magit-log-cutoff-length 1000)
+    (setq magit-status-buffer-switch-function 'switch-to-buffer)
     (setq gist-view-gist t)
     
   #+end_src
+
+* Iedit
+
+  #+begin_src emacs-lisp
     
+    (require 'iedit)
+    
+  #+end_src
+
 * Auto-complete and snippets
 
   #+begin_src emacs-lisp
-
-    (require-package 'auto-complete)
+    
+    ;; Ropemacs
+    (require 'pymacs)
+    (pymacs-load "ropemacs" "rope-")
+    
+    ;; Yasnippet
     (require-package 'yasnippet)
+    (yas/global-mode -1)
+    ;;(yas/initialize)
+    (yas/load-directory "~/.emacs.d/snippets")
+     
+    ;; Autocomplete   
+    (ensure-package 'auto-complete)
     (require 'auto-complete-config)
     (ac-config-default)
+    (ac-ropemacs-initialize)
     (ac-set-trigger-key "TAB")
-    (setq ac-auto-start nil)
-    (add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete-1.3/dict")
+    (add-to-list 'ac-modes 'org-mode)
     (add-to-list 'ac-modes 'yaml-mode)
-    (setq-default ac-sources '(ac-source-yasnippet ac-source-imenu ac-source-filename ac-source-words-in-same-mode-buffers))
+    ;; (add-to-list 'yas/known-modes 'org-mode)
     (global-auto-complete-mode 1)
-    ;; yasnippet - will only be used with autocomplete
-    (require 'yasnippet)
-    ;; assign to unused key, since we won't be using it
-    (setq yas/trigger-key (kbd "C-c <kp-multiply>"))
-    (yas/initialize)
-    ;; http://yasnippet.googlecode.com/svn/trunk/doc/snippet-organization.html
-    (yas/load-directory "~/.emacs.d/snippets")
+    (setq ac-auto-start t)
+    (setq ac-delay 0.1)
     (setq yas/indent-line 'none)
-    ;; keep the minor mode off. We'll use autocomplete
-    (yas/global-mode -1)
+    (setq yas/trigger-key (kbd "C-c <kp-multiply>"))
+    ;; (setq-default ac-sources '(ac-source-yasnippet ac-source-filename))
+    (setq-default ac-sources '(ac-source-filename))
     
   #+end_src
 
@@ -278,7 +291,7 @@
 
   #+begin_src emacs-lisp
     
-    (require-package 'smex)
+    (ensure-package 'smex)
     (smex-initialize)
     (autoload 'ido-mode "ido")
     (ido-mode t)
@@ -304,40 +317,101 @@
   #+begin_src emacs-lisp
     
     (require-package 'textmate)
-    (require 'textmate)
     (global-set-key (kbd "M-i") 'textmate-goto-symbol)
     (global-set-key (kbd "C-t") 'textmate-goto-file)
+    (global-set-key (kbd "M-P") 'textmate-goto-file)
     (global-set-key (kbd "M-T") 'textmate-goto-symbol)
     
   #+end_src
   
 * Play well with tiling window managers, a.k.a one-on-one
   Just comment this out if we're not using a nice window manager
-
+  Need to replace quit-window with something that kills the frame as well
   #+begin_src emacs-lisp
-        
-    (setq pop-up-frames t)
+            
+    (setq pop-up-frames nil)
+    (setq pop-up-windows nil)
     (setq special-display-buffer-names
           '(
             ("*Completions*" (same-frame t))
-            ("*anything*" (same-frame t))
             ("*Ido Completions*" (same-frame t))
-            ("*magit-edit-log*" (same-frame t))
+            ("*Help*" (same-frame t))
             ))
     
+    ;; (defun switch-to-buffer-other-window (buffer-or-name &optional norecord)
+    ;;   "Select the buffer specified by BUFFER-OR-NAME in another window.
+    ;; BUFFER-OR-NAME may be a buffer, a string (a buffer name), or
+    ;; nil.  Return the buffer switched to.
+    
+    ;; If called interactively, prompt for the buffer name using the
+    ;; minibuffer.  The variable `confirm-nonexistent-file-or-buffer'
+    ;; determines whether to request confirmation before creating a new
+    ;; buffer.
+    
+    ;; If BUFFER-OR-NAME is a string and does not identify an existing
+    ;; buffer, create a new buffer with that name.  If BUFFER-OR-NAME is
+    ;; nil, switch to the buffer returned by `other-buffer'.
+    
+    ;; Optional second argument NORECORD non-nil means do not put this
+    ;; buffer at the front of the list of recently selected ones.
+    
+    ;; This uses the function `display-buffer' as a subroutine; see its
+    ;; documentation for additional customization information."
+    ;;   (interactive
+    ;;    (list (read-buffer-to-switch "Switch to buffer in other window: ")))
+    ;;   (pop-to-buffer buffer-or-name t norecord))
+    
+    ;; (defun pop-to-buffer (buffer &optional action norecord)
+    ;;   "Select buffer BUFFER in some window, preferably a different one.
+    ;; BUFFER may be a buffer, a string (a buffer name), or nil.  If it
+    ;; is a string not naming an existent buffer, create a buffer with
+    ;; that name.  If BUFFER is nil, choose some other buffer.  Return
+    ;; the buffer.
+    
+    ;; This uses `display-buffer' as a subroutine.  The optional ACTION
+    ;; argument is passed to `display-buffer' as its ACTION argument.
+    ;; See `display-buffer' for more information.  ACTION is t if called
+    ;; interactively with a prefix argument, which means to pop to a
+    ;; window other than the selected one even if the buffer is already
+    ;; displayed in the selected window.
+    
+    ;; If the window to show BUFFER is not on the selected
+    ;; frame, raise that window's frame and give it input focus.
+    
+    ;; Optional third arg NORECORD non-nil means do not put this buffer
+    ;; at the front of the list of recently selected ones."
+    ;;   (interactive (list (read-buffer "Pop to buffer: " (other-buffer))
+    ;;                      (if current-prefix-arg t)))
+    ;;   (setq buffer (window-normalize-buffer-to-switch-to buffer))
+    ;;   (set-buffer buffer)
+    ;;   (let* ((old-frame (selected-frame))
+    ;;          (window (display-buffer buffer action))
+    ;;          (frame (window-frame window)))
+    ;;     ;; If we chose another frame, make sure it gets input focus.
+    ;;     (unless (eq frame old-frame)
+    ;;       (select-frame-set-input-focus frame norecord))
+    ;;     ;; Make sure new window is selected (Bug#8615), (Bug#6954).
+    ;;     (select-window window norecord)
+    ;;     buffer))
+    
   #+end_src
-* Better ansi-term with byobu
-  Not working - uncomment later. In a hook, we want to:
 
-  (setq mode-line-format nil)
+* Better ansi-term
 
-  and then redefine this:
-
-  (defun term-check-size (process)
-    (when (or (/= term-height (window-height))
-           (/= term-width (term-window-width)))
-      (term-reset-size (window-height) (term-window-width))
-      (set-process-window-size process term-height term-width)))
+  #+begin_src emacs-lisp
+    
+    (defun ansi-term-hook ()
+      (setq ansi-term-color-vector
+            [unspecified "black" "#cc0000" "#669900" "#ff8800" "#0099cc" "#9933cc" "#33b5e5" "white"]))
+      ;; (setq mode-line-format nil)
+      ;; (defun term-check-size (process)
+      ;;   (when (or (/= term-height (window-height))
+      ;;             (/= term-width (term-window-width)))
+      ;;     (term-reset-size (window-height) (term-window-width))
+      ;;     (set-process-window-size process term-height term-width))))
+    (add-hook 'term-mode-hook 'ansi-term-hook)
+    
+  #+end_src
 
 * File type support
 ** JSON
@@ -366,16 +440,6 @@
      
    #+end_src
 
-** Deft
-
-   #+begin_src emacs-lisp
-     
-     (require 'deft)
-     (setq deft-directory "~/Dropbox/notes")
-     (setq deft-use-filename-as-title t)
-     
-   #+end_src
-
 ** GO
 
    #+begin_src emacs-lisp
@@ -389,34 +453,48 @@
    
    #+begin_src emacs-lisp
      
-     ;; https://github.com/fgallina/python.el
-     ;; (add-to-list 'load-path "~/.emacs.d/vendor/python.el/")
-     ;; (require 'python)
+     (defun python-hook ()
+       (add-to-list 'ac-sources 'ac-source-ropemacs)
+       (ropemacs-mode t))
+     (add-hook 'python-mode-hook 'python-hook)
+     (add-to-list 'load-path "~/.emacs.d/vendor/zeroein/")
      
    #+end_src
    
 ** Org mode
 
    #+begin_src emacs-lisp
-     
+          
      (require 'org-install)
-     (setq org-agenda-files (list "~/org")
-           org-hide-leading-stars t
-           org-log-done t
-           org-agenda-skip-archived-trees nil
-           org-highlight-sparse-tree-matches nil)
+     (setq
+      org-agenda-files (list "~/org")
+      org-agenda-skip-archived-trees nil
+      org-capture-templates '((
+                               "t" "Todo" entry (file+headline "~/org/gtd.org" "Tasks")
+                               "* TODO %?\n  %i\n  %a")
+                              ("j" "Journal" entry (file+datetree "~/org/journal.org")
+                               "* %?"))
+      org-completion-use-ido t
+      org-directory "~/org"
+      org-default-notes-file (concat org-directory "/notes.org")
+      org-hide-leading-stars t
+      org-highlight-sparse-tree-matches nil
+      org-log-done t
+      org-mobile-directory "~/Dropbox/MobileOrg"
+      org-mobile-inbox-for-pull "~/org/inbox.org"
+      org-mobile-force-id-on-agenda-items nil
+      org-refile-targets (quote ((nil :maxlevel . 2)
+                                 (org-agenda-files :maxlevel . 2)))
+      org-src-window-setup 'current-window)
+     
      (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-     (setq org-mobile-directory "~/Dropbox/MobileOrg")
-     (setq org-directory "~/org")
-     (setq org-mobile-inbox-for-pull "~/org/inbox.org")
-     (setq org-default-notes-file (concat org-directory "/notes.org"))
      (define-key global-map "\C-cc" 'org-capture)
-     (setq org-capture-templates
-           '(("t" "Todo" entry (file+headline "~/org/gtd.org" "Tasks")
-              "* TODO %?\n  %i\n  %a")
-             ("j" "Journal" entry (file+datetree "~/org/journal.org")
-              "* %?")))
-     (setq org-mobile-force-id-on-agenda-items nil)
+          
+     (setq org-link-frame-setup
+           '((vm . vm-visit-folder-other-frame)
+             (gnus . org-gnus-no-new-news)
+             (file . find-file)
+             (wl . wl-other-frame)))
      
    #+end_src
    
@@ -427,17 +505,10 @@
     (autoload 'yaml-mode "yaml-mode" "YAML Ain't Markup Language" t)
     (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
     (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode))
+    (add-to-list 'auto-mode-alist '("\\.sls$" . yaml-mode))
     (defun yaml-hook ()
       (define-key yaml-mode-map "\C-m" 'newline-and-indent))
     (add-hook 'yaml-mode-hook 'yaml-hook)
-
-   #+end_src
-   
-** Ruby
-
-   #+begin_src emacs-lisp
-
-    (setq ruby-indent-level 4)
 
    #+end_src
    
@@ -445,16 +516,15 @@
 
    #+begin_src emacs-lisp
 
-     (require-package 'markdown-mode)
+     (ensure-package 'markdown-mode)
      (autoload 'markdown-mode "markdown-mode" "markdown" t)
      (add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
      
    #+end_src
    
 ** TeX
-
    #+begin_src emacs-lisp
-
+     
      (defun tex-hook ()
        (require 'flymake)
        (defun flymake-get-tex-args (file-name)
@@ -463,10 +533,9 @@
        (flymake-mode)
        (flyspell-mode) 
        )
-     (add-hook 'LaTeX-mode-hook 'tex-hook)
+     (add-hook 'latex-mode-hook 'tex-hook)
      
    #+end_src
-   
 ** Lua
 
    #+begin_src emacs-lisp
@@ -476,23 +545,35 @@
      
    #+end_src
    
-* Platform-specific overrides
+* X11 tweaks
   On X11, change the pointer to an arrow, and remove the menu bar
 
   #+begin_src emacs-lisp
-
+                
     (if (boundp 'x-pointer-arrow)
         (progn
-          (setq-default x-pointer-shape x-pointer-arrow)
+          (setq-default x-pointer-shape x-pointer-xterm)
           ;; hack to force the pointer shape to change
           (set-mouse-color "black")
-          (menu-bar-mode 0)))
+          (menu-bar-mode 0)
+          (set-frame-parameter (selected-frame) 'alpha '(85 85))
+          (add-to-list 'default-frame-alist '(alpha 85 85))
+          (set-face-attribute 'default nil :font "AK Sans Mono-7.5")))
     
     (if (eq system-type 'darwin)
         (progn
           (setq mac-command-modifier (quote meta))
           (setq mac-option-modifier (quote alt))
-          (set-default-font "Inconsolata-13"))
-      (set-face-attribute 'default nil :font "DejaVu Sans Mono-7.5"))
+          (set-default-font "Inconsolata-13")))
+    
+  #+end_src
+
+* Fonts
+
+  #+begin_src emacs-lisp
+    
+    (if (eq system-type 'darwin)
+        (set-default-font "Inconsolata-13")
+      (set-face-attribute 'default nil :font "AK Sans Mono-7.5"))
     
   #+end_src
